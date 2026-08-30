@@ -1,58 +1,1593 @@
-# SaudagarConnection (सौदागर कनेक्शन)
-### Direct B2B Wholesaler & Retailer Trade Matchmaking Web App
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaudagarConnection | B2B Wholesaler & Retailer Direct Trade Directory</title>
+  <meta name="description" content="Connect local retailers with verified Indian wholesale distributors at Direct Mill Rates. No catalogue upload needed. 3 Free contact unlocks.">
 
-A responsive, zero-dependency Single-Page Web Application built with **HTML5, Tailwind CSS, and Vanilla JavaScript** designed for instantaneous deployment on **GitHub Pages**.
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts (Plus Jakarta Sans & Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
----
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              200: '#BFDBFE',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1E3A8A',
+              800: '#1E293B',
+              900: '#0F172A',
+              950: '#030712',
+            },
+            gold: {
+              50: '#FFFBEB',
+              100: '#FEF3C7',
+              400: '#FBBF24',
+              500: '#F59E0B',
+              600: '#D97706',
+              700: '#B45309',
+            },
+            whatsapp: {
+              DEFAULT: '#25D366',
+              dark: '#128C7E',
+              hover: '#20BA56'
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+          }
+        }
+      }
+    }
+  </script>
 
-## 🚀 Live GitHub Pages Deployment Guide
+  <style>
+    /* Custom Scrollbars and Smooth Transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scroll {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-slate-800 antialiased flex flex-col bg-slate-50">
 
-To host this app on GitHub Pages in under 2 minutes:
+  <!-- ================= TOP HEADER & NAVIGATION ================= -->
+  <header class="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+        
+        <!-- Logo & Branding -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('explore')">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20 text-navy-950 font-extrabold text-xl">
+            <i class="fa-solid fa-handshake"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-lg sm:text-xl font-extrabold tracking-tight text-white">Saudagar<span class="text-gold-400">Connection</span></span>
+              <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <i class="fa-solid fa-shield-check mr-1"></i> 100% VERIFIED B2B
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-300 hidden sm:block">Direct Mill Rate Wholesale Directory & RFQ Engine</p>
+          </div>
+        </div>
 
-1. **Create / Push to GitHub**:
-   ```bash
-   git init
-   git add index.html README.md
-   git commit -m "Deploy SaudagarConnection Web App"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<your-repo-name>.git
-   git push -u origin main
-   ```
+        <!-- Center Ticker Info (Desktop Only) -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-navy-800/80 border border-navy-700 text-xs text-slate-200">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="font-medium"><strong class="text-gold-400" id="headerDemandCount">1,480+</strong> Retailers searching Sadar Bazar, APMC Vashi & Surat today</span>
+        </div>
 
-2. **Enable GitHub Pages**:
-   - Go to your repository settings: `Settings > Pages`.
-   - Under **Build and deployment > Source**, select **Deploy from a branch**.
-   - Under **Branch**, select `main` (or `master`) and folder `/ (root)`.
-   - Click **Save**.
-   - Your live URL will be ready at: `https://<your-username>.github.io/<your-repo-name>/`
+        <!-- Role Switcher & Action Controls -->
+        <div class="flex items-center gap-3">
+          
+          <!-- Role Toggle (Retailer / Wholesaler) -->
+          <div class="bg-navy-800 p-1 rounded-xl border border-navy-700 flex items-center shadow-inner">
+            <button id="btnRoleRetailer" onclick="setRole('RETAILER')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 bg-gold-500 text-navy-950 shadow">
+              <i class="fa-solid fa-store mr-1.5"></i> Retailer Mode
+            </button>
+            <button id="btnRoleWholesaler" onclick="setRole('WHOLESALER')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white">
+              <i class="fa-solid fa-warehouse mr-1.5"></i> Wholesaler Hub
+            </button>
+          </div>
 
----
+          <!-- Free Unlocks Pill Badge (Retailer Mode) -->
+          <div id="retailerUnlocksPill" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gold-400/10 border border-gold-400/30 text-gold-400 text-xs font-bold">
+            <i class="fa-solid fa-gift"></i>
+            <span id="navUnlocksLeft">3 Free Unlocks Left</span>
+          </div>
 
-## 🌟 Key Features Implemented
+          <!-- Saved Unlocked Contacts Button -->
+          <button onclick="switchTab('unlocked')" class="relative p-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-200 border border-navy-700 transition" title="Unlocked Suppliers">
+            <i class="fa-solid fa-address-book text-base"></i>
+            <span id="unlockedBadgeCount" class="absolute -top-1 -right-1 bg-emerald-500 text-white font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">1</span>
+          </button>
+        </div>
 
-### 1. Dual-Role Architecture
-- **Retailer Sourcing Mode**: Store and Kirana owners can search, filter by market hubs (Sadar Bazar, Khari Baoli, APMC Vashi, Surat Textile Hub), inspect verified distributors, and send direct quotations.
-- **Wholesaler Distribution Hub**: Stockists can track live buyer demand volume, review incoming RFQs, and activate their verified profile in under 1 minute with **Zero Catalogue Upload Needed**.
+      </div>
+    </div>
+  </header>
 
-### 2. Direct WhatsApp RFQ (Request For Quotation)
-- Generates commercial B2B inquiries (products required, carton/truckload quantities, delivery pincode, store name) with direct one-tap opening in WhatsApp (`api.whatsapp.com`).
+  <!-- ================= SUB-NAV BANNER / QUICK STATS ================= -->
+  <div class="bg-navy-950 text-slate-300 py-2 border-b border-navy-800 px-4 text-xs">
+    <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto custom-scroll gap-4 whitespace-nowrap">
+      <div class="flex items-center gap-4">
+        <span class="flex items-center text-gold-400 font-bold">
+          <i class="fa-solid fa-bolt mr-1.5 text-gold-400"></i> LIVE MANDI STANDING:
+        </span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Khari Baoli', 'Grocery')">📍 Khari Baoli (Spices & Dryfruits)</span>
+        <span class="text-slate-600">•</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Sadar Bazar', 'Cosmetics')">📍 Sadar Bazar (FMCG & General)</span>
+        <span class="text-slate-600">•</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Surat Textile Market', 'Textiles')">📍 Surat Textile Hub (Direct Mill Sarees)</span>
+        <span class="text-slate-600">•</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('APMC Vashi', 'Grocery')">📍 APMC Vashi (Grains & Edible Oil)</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-badge-check"></i> 100% GST & Udyam Verified</span>
+      </div>
+    </div>
+  </div>
 
-### 3. "3 Free Contact Unlocks" Trial Engine
-- Retailers receive **3 Free Trial Unlocks** to reveal direct phone numbers and exact warehouse addresses with zero upfront fee.
-- Instant fallback to ₹49 Razorpay/UPI/Google Pay simulator once trial quota is used.
+  <!-- ================= MAIN CONTENT AREA ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-### 4. Interactive Voice Search
-- Voice search modal with animated pulsating microphone waveforms and quick prompts in Hindi and English (e.g., *"Tata Tea Wholesaler Sadar Bazar"*, *"Surat Cotton Sarees Direct Mill Rate"*).
+    <!-- ============================================================== -->
+    <!-- VIEW 1: RETAILER B2B EXPLORE & DIRECT SUPPLIER SOURCING       -->
+    <!-- ============================================================== -->
+    <div id="retailerView" class="space-y-6">
 
-### 5. Trust & Verification Signals
-- **Direct Mill Rate & 10+ Years Mandi Standing Badges**.
-- 100% GSTIN, Justdial, and Udyam verification badges.
-- Response time and same-day dispatch SLAs.
+      <!-- Welcome Free Trial Unlocks Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900 border border-gold-400/40 p-5 sm:p-6 text-white shadow-xl">
+        <div class="absolute right-0 top-0 bottom-0 opacity-10 pointer-events-none flex items-center pr-6">
+          <i class="fa-solid fa-gift text-9xl text-gold-400"></i>
+        </div>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-gold-500 text-navy-950">
+                🎉 NEW RETAILER WELCOME OFFER
+              </span>
+              <span class="text-xs text-gold-300 font-semibold">Zero Fee Required</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
+              Get 3 Free Wholesaler Contact Unlocks
+            </h2>
+            <p class="text-sm text-slate-300 max-w-2xl">
+              Connect directly with verified master stockists, APMC mandi distributors, and direct mill suppliers. View full phone numbers, warehouse addresses, and request wholesale rates.
+            </p>
+          </div>
 
----
+          <div class="bg-navy-950/80 rounded-xl p-3.5 border border-navy-700 min-w-[240px] flex flex-col justify-center space-y-2">
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span class="text-slate-300">Free Trial Quota:</span>
+              <span class="text-gold-400 text-sm" id="trialQuotaText">3 of 3 Available</span>
+            </div>
+            <div class="w-full bg-navy-800 rounded-full h-2.5 overflow-hidden">
+              <div id="trialProgressBar" class="bg-gradient-to-r from-gold-500 to-gold-400 h-2.5 rounded-full transition-all duration-300" style="width: 100%"></div>
+            </div>
+            <p class="text-[10px] text-slate-400 text-center">Standard ₹49 connection fee is 100% waived for your first 3 connections.</p>
+          </div>
+        </div>
+      </div>
 
-## 🛠️ Tech Stack
-- **HTML5**: Semantic layout with accessible modal dialogs and inputs.
-- **Tailwind CSS (CDN)**: Modern responsive styling with custom Navy, Gold, and WhatsApp color palettes.
-- **FontAwesome 6**: Clean B2B and trade icons.
-- **Vanilla JavaScript**: State management, live search filtering, modal management, and dynamic local persistence.
+      <!-- Live Buyer Demand Ticker Component -->
+      <div class="rounded-2xl bg-navy-900 border border-gold-400/30 p-4 sm:p-5 text-white shadow-lg">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-navy-800">
+          <div class="flex items-center gap-2.5">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
+            </span>
+            <span class="text-xs font-extrabold tracking-wider text-gold-400 uppercase">Live Buyer Demand Ticker</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              <i class="fa-solid fa-arrow-trend-up"></i> +28% Sourcing Surge Today
+            </span>
+          </div>
+          <div class="text-xs text-slate-400">
+            Real-time searches from Delhi NCR, Mumbai, Surat, Ahmedabad, Kanpur & Bangalore
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3">
+          <div class="flex items-center gap-3 bg-navy-800/60 p-2.5 rounded-xl border border-navy-700/60">
+            <div class="w-9 h-9 rounded-lg bg-navy-700 flex items-center justify-center text-gold-400 font-bold">
+              <i class="fa-solid fa-cart-flatbed"></i>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-white">1,420+ Inquiries Today</div>
+              <div class="text-[11px] text-slate-300">Grocery, Edible Oils & Spices</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 bg-navy-800/60 p-2.5 rounded-xl border border-navy-700/60">
+            <div class="w-9 h-9 rounded-lg bg-navy-700 flex items-center justify-center text-emerald-400 font-bold">
+              <i class="fa-solid fa-shirt"></i>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-white">890+ Mill Rate Requests</div>
+              <div class="text-[11px] text-slate-300">Surat & Gandhi Nagar Garments</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 bg-navy-800/60 p-2.5 rounded-xl border border-navy-700/60">
+            <div class="w-9 h-9 rounded-lg bg-navy-700 flex items-center justify-center text-blue-400 font-bold">
+              <i class="fa-solid fa-mobile-screen"></i>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-white">640+ Accessories Leads</div>
+              <div class="text-[11px] text-slate-300">Gaffar Market & SP Road Fast Supply</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sourcing Search & Filter Controls -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 space-y-4">
+        
+        <!-- Search Input Bar with Voice Search Trigger -->
+        <div class="relative flex items-center">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-navy-700">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+          </div>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search by category, brand (e.g. Tata, Boat, Fortune, MDH), or mandi location..."
+            oninput="handleSearch(this.value)"
+            class="w-full pl-11 pr-24 py-3.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-navy-600 focus:border-navy-600 text-sm sm:text-base transition"
+          >
+          <div class="absolute inset-y-0 right-0 pr-2 flex items-center gap-1.5">
+            <button 
+              onclick="openVoiceSearchModal()" 
+              class="px-3 py-2 bg-navy-50 hover:bg-navy-100 text-navy-700 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-navy-200 transition"
+              title="Voice Search (आवाज़ से खोजें)"
+            >
+              <i class="fa-solid fa-microphone text-navy-600 animate-pulse"></i>
+              <span class="hidden sm:inline">Voice</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Row: Category Chips -->
+        <div>
+          <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-2">
+            <span>FILTER BY SECTOR:</span>
+            <button onclick="resetFilters()" class="text-navy-600 hover:underline">Reset All Filters</button>
+          </div>
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 custom-scroll" id="categoryChipsContainer">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Secondary Filters Row: Mandi Hub, Sorting, Verified Toggle -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100 text-xs">
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Mandi / Trade Hub:</label>
+            <select id="selectArea" onchange="handleAreaChange(this.value)" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-medium text-slate-700 focus:ring-2 focus:ring-navy-600 focus:outline-none">
+              <option value="">All Mandis & Cities</option>
+              <option value="Sadar Bazar">Sadar Bazar, Delhi</option>
+              <option value="Khari Baoli">Khari Baoli Spice Mandi, Delhi</option>
+              <option value="APMC Vashi">APMC Vashi, Navi Mumbai</option>
+              <option value="Surat Textile Market">Surat Textile Hub, Gujarat</option>
+              <option value="Gandhi Nagar">Gandhi Nagar Garments, Delhi</option>
+              <option value="SP Road">SP Road Electronics, Bangalore</option>
+              <option value="Crawford Market">Crawford Market, Mumbai</option>
+              <option value="Wholesale Mandi Kanpur">Wholesale Mandi, Kanpur</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Sort Suppliers By:</label>
+            <select id="selectSort" onchange="handleSortChange(this.value)" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-medium text-slate-700 focus:ring-2 focus:ring-navy-600 focus:outline-none">
+              <option value="standing">Direct Mill Rate & Mandi Standing (Default)</option>
+              <option value="rating">Highest Rated Wholesalers</option>
+              <option value="mov_low">Lowest Minimum Order Value (MOV)</option>
+              <option value="response">Fastest Response Time</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 w-full cursor-pointer hover:bg-slate-50 transition">
+              <input type="checkbox" id="checkVerifiedOnly" onchange="handleVerifiedToggle(this.checked)" class="rounded text-navy-600 focus:ring-navy-500 h-4 w-4">
+              <span class="font-bold text-slate-700">100% Justdial & GST Verified Only</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Suppliers Grid Header -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-extrabold text-navy-900 flex items-center gap-2">
+            Verified Wholesalers & Master Stockists
+            <span id="resultsCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-navy-100 text-navy-800 font-bold">12 Found</span>
+          </h3>
+          <p class="text-xs text-slate-500">Direct factory prices, full GST invoices & bulk dispatch guarantees</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+          <i class="fa-solid fa-shield-check"></i> Zero Middlemen Commission
+        </div>
+      </div>
+
+      <!-- Wholesalers Card Grid -->
+      <div id="wholesalersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+        <!-- Rendered Dynamically via JS -->
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: WHOLESALER HUB (DASHBOARD & INCOMING INQUIRIES)        -->
+    <!-- ============================================================== -->
+    <div id="wholesalerView" class="hidden space-y-6">
+      
+      <!-- Wholesaler Welcome & No Catalogue Upload Banner -->
+      <div class="rounded-2xl bg-gradient-to-r from-gold-50 via-amber-50 to-gold-100 border-2 border-gold-400 p-6 shadow-md">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-600 text-white">
+                ⚡ 1 MINUTE SETUP
+              </span>
+              <span class="text-xs font-bold text-amber-800">Zero Cataloging Hassle</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">
+              No Catalogue Upload Needed
+            </h2>
+            <p class="text-sm text-slate-700 max-w-2xl">
+              Don't waste days photographing thousands of SKUs! Just list your brands dealt in and supply categories to start receiving direct phone calls and WhatsApp RFQs from verified retail shop owners.
+            </p>
+          </div>
+          <button onclick="openWholesalerRegistrationModal()" class="px-5 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm shadow-lg shadow-navy-900/20 transition whitespace-nowrap">
+            <i class="fa-solid fa-user-plus mr-1.5 text-gold-400"></i> Register / Edit Wholesaler Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Wholesaler Metrics Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-500 uppercase">Retailer Profile Views</div>
+          <div class="text-2xl font-extrabold text-navy-900 mt-1">428</div>
+          <div class="text-[11px] text-emerald-600 font-semibold mt-0.5"><i class="fa-solid fa-arrow-trend-up"></i> +34% this week</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-500 uppercase">Direct WhatsApp RFQs</div>
+          <div class="text-2xl font-extrabold text-emerald-600 mt-1">32</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Average ticket size ₹45,000</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-500 uppercase">Contact Unlocks By Retailers</div>
+          <div class="text-2xl font-extrabold text-gold-600 mt-1">19</div>
+          <div class="text-[11px] text-emerald-600 font-semibold mt-0.5">100% verified shop owners</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-500 uppercase">Verified Trade Badge</div>
+          <div class="text-sm font-extrabold text-navy-800 mt-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-certificate text-gold-500 text-lg"></i> Direct Mill Rate
+          </div>
+          <div class="text-[11px] text-slate-500 mt-0.5">10+ Yrs Mandi Standing</div>
+        </div>
+      </div>
+
+      <!-- Incoming RFQs & Inquiries Stream -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-base font-extrabold text-navy-900">Live Inquiries & RFQs from Local Retailers</h3>
+            <p class="text-xs text-slate-500">Respond directly on WhatsApp or in-app chat</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-navy-50 text-navy-700">3 New Inquiries</span>
+        </div>
+
+        <div class="space-y-3" id="wholesalerInquiriesContainer">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 3: UNLOCKED CONTACTS DIRECTORY (SAVED SUPPLIERS)         -->
+    <!-- ============================================================== -->
+    <div id="unlockedView" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <button onclick="switchTab('explore')" class="text-xs font-bold text-navy-600 hover:underline mb-1 flex items-center gap-1">
+            <i class="fa-solid fa-arrow-left"></i> Back to Explore
+          </button>
+          <h2 class="text-xl font-extrabold text-navy-900">Your Unlocked Wholesalers Directory</h2>
+          <p class="text-xs text-slate-500">Direct phone numbers, exact warehouse addresses, and WhatsApp shortcuts</p>
+        </div>
+      </div>
+
+      <div id="unlockedListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-navy-950 text-slate-400 text-xs py-8 border-t border-navy-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-gold-500 text-navy-950 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-handshake"></i>
+          </div>
+          <span class="text-white font-bold text-sm">SaudagarConnection</span>
+          <span class="text-slate-500">| Direct B2B Wholesale Matchmaking</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <span class="text-slate-300"><i class="fa-solid fa-shield-check text-emerald-400 mr-1"></i> GSTIN & Udyam Verified</span>
+          <span class="text-slate-300"><i class="fa-solid fa-lock text-gold-400 mr-1"></i> Razorpay & UPI Enabled</span>
+          <span class="text-slate-300"><i class="fa-brands fa-whatsapp text-whatsapp mr-1"></i> Direct WhatsApp RFQ</span>
+        </div>
+      </div>
+      <div class="border-t border-navy-800/80 pt-4 flex flex-col sm:flex-row items-center justify-between text-slate-400 text-[11px] gap-2">
+        <p>© 2026 SaudagarConnection. Built for Indian Local Wholesalers, Stockists & Kirana Store Owners.</p>
+        <p>Ready for GitHub Pages hosting with Tailwind CSS & Vanilla JS.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 1: VOICE SEARCH MODAL (आवाज़ से खोजें)                  -->
+  <!-- ============================================================== -->
+  <div id="voiceModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-200 animate-in fade-in zoom-in duration-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-microphone"></i>
+          </div>
+          <h3 class="font-extrabold text-navy-900 text-base">B2B Voice Search (आवाज़ से खोजें)</h3>
+        </div>
+        <button onclick="closeModal('voiceModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Animated Voice Microphone Visualizer -->
+      <div class="flex flex-col items-center justify-center py-6 space-y-4">
+        <div class="relative flex items-center justify-center">
+          <div class="absolute w-28 h-28 rounded-full bg-navy-500/20 animate-ping"></div>
+          <div class="absolute w-20 h-20 rounded-full bg-navy-600/30 animate-pulse"></div>
+          <button class="relative w-16 h-16 rounded-full bg-gradient-to-tr from-navy-700 to-navy-500 text-white flex items-center justify-center text-2xl shadow-xl shadow-navy-700/30">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+        </div>
+        <div class="text-center">
+          <p class="text-sm font-extrabold text-navy-900" id="voiceStatusText">Listening... Speak in Hindi or English</p>
+          <p class="text-xs text-slate-500 mt-0.5">e.g. "Tata Tea Wholesaler Sadar Bazar"</p>
+        </div>
+      </div>
+
+      <!-- Preset Voice Search Clickable Chips -->
+      <div class="space-y-2">
+        <p class="text-xs font-bold text-slate-500 uppercase">Or tap popular wholesale voice prompts:</p>
+        <div class="space-y-1.5" id="voicePresetsContainer">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button onclick="closeModal('voiceModal')" class="w-full py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50">
+          Cancel Voice Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 2: DIRECT WHATSAPP RFQ (REQUEST FOR QUOTATION)           -->
+  <!-- ============================================================== -->
+  <div id="rfqModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-whatsapp/20 text-whatsapp-dark flex items-center justify-center text-xl">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-base">Direct WhatsApp RFQ</h3>
+            <p class="text-xs text-slate-500" id="rfqWholesalerName">To: Supplier</p>
+          </div>
+        </div>
+        <button onclick="closeModal('rfqModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Notice Banner -->
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-start gap-2.5 text-xs text-emerald-800">
+        <i class="fa-solid fa-shield-check text-emerald-600 mt-0.5 text-sm"></i>
+        <div>
+          <span class="font-bold">Direct Mill Rate Guarantee:</span> Sends pre-formatted commercial quotation request directly to the owner's WhatsApp number.
+        </div>
+      </div>
+
+      <!-- RFQ Form Fields -->
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Products / Brands Needed:</label>
+          <textarea id="rfqRequirementInput" rows="2" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Estimated Quantity:</label>
+            <input type="text" id="rfqQuantityInput" value="20 to 50 Full Cartons" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Delivery Pincode / City:</label>
+            <input type="text" id="rfqPincodeInput" value="110006 - Delhi" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Your Retail Store Name:</label>
+          <input type="text" id="rfqStoreNameInput" value="Shree Ganesh Mega Mart" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="pt-2 flex items-center gap-3">
+        <button onclick="sendDirectWhatsAppRfq()" class="flex-1 py-3 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-whatsapp/20 transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+          Send Pre-Filled WhatsApp RFQ Now
+        </button>
+        <button onclick="closeModal('rfqModal')" class="py-3 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 3: CONTACT UNLOCK / RAZORPAY PAYMENT SIMULATOR           -->
+  <!-- ============================================================== -->
+  <div id="unlockModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-xl bg-navy-100 text-navy-800 flex items-center justify-center text-base font-bold">
+            <i class="fa-solid fa-lock-open"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-base">Unlock Supplier Details</h3>
+            <p class="text-xs text-slate-500" id="unlockWholesalerTitle">Supplier Contact</p>
+          </div>
+        </div>
+        <button onclick="closeModal('unlockModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Free Trial vs Paid Banner -->
+      <div id="unlockTrialOption" class="bg-gradient-to-r from-gold-50 to-amber-50 border border-gold-300 rounded-2xl p-4 text-xs space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-extrabold text-navy-950 flex items-center gap-1.5">
+            <i class="fa-solid fa-gift text-gold-600"></i> Free Trial Unlock Available
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">₹0 FREE</span>
+        </div>
+        <p class="text-slate-700">You have <strong id="modalFreeCount">3</strong> free trial unlocks remaining. Unlock this wholesaler's direct phone & warehouse address instantly with 1-click!</p>
+        <button onclick="executeTrialUnlock()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow transition">
+          ⚡ Apply Free Trial Unlock (₹0)
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="relative flex items-center justify-center">
+        <div class="border-t border-slate-200 w-full"></div>
+        <span class="bg-white px-2 text-[11px] text-slate-400 font-bold uppercase">Or Standard Checkout</span>
+      </div>
+
+      <!-- Paid Option (₹49) -->
+      <div class="space-y-3 text-xs">
+        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div>
+            <div class="font-bold text-navy-900">One-Time Direct Connection Fee</div>
+            <div class="text-[11px] text-slate-500">Includes direct phone, warehouse visit pass & rate sheet</div>
+          </div>
+          <div class="text-base font-extrabold text-navy-900">₹49</div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="executePaidUnlock('UPI / Google Pay')" class="p-2.5 rounded-xl border border-slate-200 hover:border-navy-600 text-center font-bold text-slate-700 hover:bg-navy-50 flex flex-col items-center gap-1">
+            <i class="fa-brands fa-google-pay text-lg text-blue-600"></i>
+            <span>Google Pay</span>
+          </button>
+          <button onclick="executePaidUnlock('PhonePe / Paytm')" class="p-2.5 rounded-xl border border-slate-200 hover:border-navy-600 text-center font-bold text-slate-700 hover:bg-navy-50 flex flex-col items-center gap-1">
+            <i class="fa-solid fa-qrcode text-lg text-purple-600"></i>
+            <span>PhonePe / UPI</span>
+          </button>
+          <button onclick="executePaidUnlock('NetBanking / Card')" class="p-2.5 rounded-xl border border-slate-200 hover:border-navy-600 text-center font-bold text-slate-700 hover:bg-navy-50 flex flex-col items-center gap-1">
+            <i class="fa-solid fa-credit-card text-lg text-emerald-600"></i>
+            <span>Card / Net</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 4: WHOLESALER FULL PROFILE DRAWER                        -->
+  <!-- ============================================================== -->
+  <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto" id="detailModalContent">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5: WHOLESALER 1-MINUTE REGISTRATION MODAL                -->
+  <!-- ============================================================== -->
+  <div id="onboardModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-xl bg-gold-100 text-gold-700 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-warehouse"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-base">Wholesaler Quick Registration</h3>
+            <p class="text-xs text-slate-500">No catalogue needed • Receive calls & RFQs</p>
+          </div>
+        </div>
+        <button onclick="closeModal('onboardModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleWholesalerRegister(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Business / Firm Name:</label>
+          <input type="text" id="regFirmName" required placeholder="e.g. Mahavir Trading Corporation" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Mandi / Trade Hub Area:</label>
+            <input type="text" id="regArea" required placeholder="e.g. Sadar Bazar, Delhi" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">WhatsApp Mobile Number:</label>
+            <input type="tel" id="regPhone" required placeholder="+91 98110 XXXXX" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Primary Category:</label>
+            <select id="regCategory" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+              <option value="Grocery & FMCG">Grocery & FMCG</option>
+              <option value="Textiles & Garments">Textiles & Garments</option>
+              <option value="Electronics & Mobile">Electronics & Mobile</option>
+              <option value="Cosmetics & Personal Care">Cosmetics & Personal Care</option>
+              <option value="Hardware & Sanitary">Hardware & Sanitary</option>
+              <option value="Footwear & Leather">Footwear & Leather</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Mandi Standing (Years):</label>
+            <input type="number" id="regYears" value="12" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Major Brands / Items Dealt In (Comma Separated):</label>
+          <input type="text" id="regBrands" required placeholder="e.g. Tata, MDH, Fortune, Everest, Catch" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">GSTIN Number (Optional / Instant Verification):</label>
+          <input type="text" id="regGstin" placeholder="07AAAAA0000A1Z5" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-navy-900/20 transition">
+            <i class="fa-solid fa-check-circle mr-1.5 text-gold-400"></i> Activate Wholesaler Profile Now
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-navy-900 text-white text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-2xl border border-gold-400/40 flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+    <div id="toastIcon" class="text-gold-400 text-base"><i class="fa-solid fa-bell"></i></div>
+    <div id="toastMessage" class="font-bold">Notification message</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT APPLICATION CORE LOGIC                             -->
+  <!-- ============================================================== -->
+  <script>
+    // --- Master Data: Verified Wholesalers ---
+    const INITIAL_WHOLESALERS = [
+      {
+        id: 'ws-1',
+        businessName: 'Gupta Bros & Sons Mandi Stockists',
+        contactPerson: 'Ramesh Gupta',
+        phone: '+91 98112 34567',
+        email: 'ramesh.gupta@mandiwholesale.in',
+        address: 'Shop 42, Gali Mirchi, Khari Baoli Spice Market, Delhi 110006',
+        city: 'Delhi NCR',
+        area: 'Khari Baoli',
+        categories: ['Grocery & FMCG', 'Spices & Dryfruits'],
+        brandsDealtIn: ['MDH', 'Everest', 'Catch', 'Fortune Oil', 'Tata Sampann', 'Kohinoor Rice'],
+        gstin: '07AABCG1234F1Z9',
+        rating: 4.9,
+        reviewsCount: 148,
+        dealsCompleted: 840,
+        minOrderValue: '₹15,000',
+        deliveryTime: 'Same Day Dispatch',
+        responseTime: 'Within 10 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: 18,
+        marketStandingNote: '18+ Years Direct Mandi Standing',
+        description: 'Direct APMC mill rate stockist and authorized distributor for Khari Baoli market with verified GST and same-day Haryana/UP truck dispatch.'
+      },
+      {
+        id: 'ws-2',
+        businessName: 'Surat Fab Mill Direct Tex',
+        contactPerson: 'Pravinbhai Patel',
+        phone: '+91 98250 88991',
+        email: 'pravin@surattextilemill.com',
+        address: 'B-214, Millennium Textile Market 2, Ring Road, Surat 395002',
+        city: 'Surat',
+        area: 'Surat Textile Market',
+        categories: ['Textiles & Garments'],
+        brandsDealtIn: ['Vimal', 'Surat Silk', 'Zari Sarees', 'Cotton Kurtis', 'Lehenga Fabrics'],
+        gstin: '24AAACP4567K1Z4',
+        rating: 4.8,
+        reviewsCount: 215,
+        dealsCompleted: 1250,
+        minOrderValue: '₹10,000',
+        deliveryTime: '24-48 Hours Transport',
+        responseTime: 'Within 5 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: 22,
+        marketStandingNote: '22+ Years Direct Mill Rate Weaving',
+        description: 'Direct factory mill outlet offering wholesale catalog of pure cotton sarees, designer suits, and dress materials at factory loom rates.'
+      },
+      {
+        id: 'ws-3',
+        businessName: 'Mahavir Electronics & Mobile Spares',
+        contactPerson: 'Sanjay Jain',
+        phone: '+91 98450 12398',
+        email: 'sanjay@sproadmobile.com',
+        address: 'No. 18, 1st Floor, SP Road Electronics Hub, Bangalore 560002',
+        city: 'Bangalore',
+        area: 'SP Road',
+        categories: ['Electronics & Mobile'],
+        brandsDealtIn: ['Boat', 'Noise', 'Realme', 'SanDisk', 'Portronics', 'Fast Chargers'],
+        gstin: '29AAAPM9876J1Z1',
+        rating: 4.7,
+        reviewsCount: 92,
+        dealsCompleted: 620,
+        minOrderValue: '₹5,000',
+        deliveryTime: 'Next Day Courier',
+        responseTime: 'Within 15 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: 14,
+        marketStandingNote: '14+ Years SP Road Direct Importer',
+        description: 'Master distributor for mobile accessories, OEM spare screens, fast chargers, and smart watch accessories across South India.'
+      },
+      {
+        id: 'ws-4',
+        businessName: 'Kalyan FMCG & Daily Essentials Mega Hub',
+        contactPerson: 'Kalyan Chand',
+        phone: '+91 98200 44556',
+        email: 'orders@apmcwholesaler.com',
+        address: 'Sector 19, Commodity Market Bldg 4, APMC Vashi, Navi Mumbai 400703',
+        city: 'Mumbai',
+        area: 'APMC Vashi',
+        categories: ['Grocery & FMCG'],
+        brandsDealtIn: ['Tata Tea', 'HUL Surf Excel', 'Dabur', 'Amul Butter', 'Haldiram', 'Patanjali'],
+        gstin: '27AABCK8901L1Z8',
+        rating: 4.9,
+        reviewsCount: 310,
+        dealsCompleted: 2100,
+        minOrderValue: '₹20,000',
+        deliveryTime: 'Same Day Tempo Dispatch',
+        responseTime: 'Within 10 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: 25,
+        marketStandingNote: '25+ Years APMC Navi Mumbai Mandi',
+        description: 'Master stockist supplying 400+ Kirana & supermarket stores across MMR with lowest wholesale margin on branded FMCG carton loads.'
+      },
+      {
+        id: 'ws-5',
+        businessName: 'Aggarwal Cosmetics & General Store Stockists',
+        contactPerson: 'Manish Aggarwal',
+        phone: '+91 98101 77665',
+        email: 'sales@sadarbazartrade.in',
+        address: 'Shop 110, Swadeshi Market, Sadar Bazar, Delhi 110006',
+        city: 'Delhi NCR',
+        area: 'Sadar Bazar',
+        categories: ['Cosmetics & Personal Care', 'Grocery & FMCG'],
+        brandsDealtIn: ['Lakme', 'Nivea', 'Ponds', 'Garnier', 'Maybelline', 'Godrej Hair'],
+        gstin: '07AAACA3412P1Z0',
+        rating: 4.8,
+        reviewsCount: 175,
+        dealsCompleted: 980,
+        minOrderValue: '₹8,000',
+        deliveryTime: '24 Hours Dispatch',
+        responseTime: 'Within 20 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: 16,
+        marketStandingNote: '16+ Years Sadar Bazar Trade Hub',
+        description: 'Premier cosmetics, salon products, and personal hygiene wholesale stockist with 100% original brand warranty and bulk box pricing.'
+      },
+      {
+        id: 'ws-6',
+        businessName: 'Shree Balaji Sanitary & Hardware Depot',
+        contactPerson: 'Deepak Sharma',
+        phone: '+91 94120 66554',
+        email: 'balaji@hardwaremandi.com',
+        address: '88, Iron & Hardware Mandi, Latouche Road, Kanpur 208001',
+        city: 'Kanpur',
+        area: 'Wholesale Mandi Kanpur',
+        categories: ['Hardware & Sanitary'],
+        brandsDealtIn: ['Astral Pipes', 'Supreme', 'Cera', 'Jaquar', 'Asian Paints', 'Fevicol'],
+        gstin: '09AAAFB7788Q1Z6',
+        rating: 4.6,
+        reviewsCount: 68,
+        dealsCompleted: 440,
+        minOrderValue: '₹25,000',
+        deliveryTime: '2-3 Days Truck Dispatch',
+        responseTime: 'Within 30 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: 19,
+        marketStandingNote: '19+ Years Mandi Standing',
+        description: 'Direct factory distributor of CPVC pipes, sanitaryware fittings, industrial fasteners, and adhesives for construction retail shops.'
+      }
+    ];
+
+    const CATEGORIES = [
+      { id: '', name: 'All Categories', icon: 'fa-layer-group', count: 12 },
+      { id: 'Grocery & FMCG', name: 'Grocery & FMCG', icon: 'fa-basket-shopping', count: 5 },
+      { id: 'Textiles & Garments', name: 'Textiles & Garments', icon: 'fa-shirt', count: 3 },
+      { id: 'Electronics & Mobile', name: 'Electronics & Spares', icon: 'fa-mobile-screen', count: 2 },
+      { id: 'Cosmetics & Personal Care', name: 'Cosmetics & Beauty', icon: 'fa-wand-magic-sparkles', count: 2 },
+      { id: 'Hardware & Sanitary', name: 'Hardware & Pipes', icon: 'fa-wrench', count: 1 }
+    ];
+
+    const VOICE_PROMPTS = [
+      "Tata Tea Wholesaler in Sadar Bazar",
+      "Surat Cotton Sarees Direct Mill Rate",
+      "APMC Grain Market Vashi Edible Oils",
+      "Boat Fast Chargers SP Road Bangalore",
+      "MDH Masala Distributor Khari Baoli",
+      "Lakme Cosmetics Carton Rate Sadar Bazar"
+    ];
+
+    // --- State Management ---
+    let wholesalers = [...INITIAL_WHOLESALERS];
+    let currentRole = 'RETAILER';
+    let freeUnlocksRemaining = 3;
+    let unlockedWholesalerIds = new Set(['ws-1']); // Initial unlocked demo
+    let searchQuery = '';
+    let selectedCategory = '';
+    let selectedArea = '';
+    let selectedSort = 'standing';
+    let verifiedOnly = false;
+    let targetWholesaler = null;
+
+    // --- Inquiries Database ---
+    let wholesalerInquiries = [
+      {
+        id: 'inq-1',
+        retailerName: 'Gupta Kirana Superstore (Noida)',
+        phone: '+91 98188 12345',
+        requirement: '50 Cartons Fortune Sunlite Oil & 30 Bags Tata Salt',
+        quantity: 'Bulk Truckload',
+        time: '12 mins ago',
+        status: 'Unanswered'
+      },
+      {
+        id: 'inq-2',
+        retailerName: 'Shree Radhey Garments (Jaipur)',
+        phone: '+91 94140 55667',
+        requirement: '200 Pieces Pure Chanderi Sarees Direct Mill Rate',
+        quantity: 'Trial Carton Dispatch',
+        time: '34 mins ago',
+        status: 'Quotation Sent'
+      },
+      {
+        id: 'inq-3',
+        retailerName: 'Bangalore Mobile Zone (Indiranagar)',
+        phone: '+91 99000 88776',
+        requirement: '100 Boat Type-C 65W Fast Chargers + Earphones',
+        quantity: 'Direct Courier',
+        time: '1 hour ago',
+        status: 'Contact Unlocked'
+      }
+    ];
+
+    // --- Application Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategoryChips();
+      renderVoicePresets();
+      renderWholesalers();
+      renderUnlockedDirectory();
+      renderWholesalerInquiries();
+      updateUnlockUI();
+    });
+
+    // --- Role Switching ---
+    function setRole(role) {
+      currentRole = role;
+      const btnRetailer = document.getElementById('btnRoleRetailer');
+      const btnWholesaler = document.getElementById('btnRoleWholesaler');
+      const retailerView = document.getElementById('retailerView');
+      const wholesalerView = document.getElementById('wholesalerView');
+      const unlockedView = document.getElementById('unlockedView');
+      const retailerPill = document.getElementById('retailerUnlocksPill');
+
+      if (role === 'RETAILER') {
+        btnRetailer.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-gold-500 text-navy-950 shadow";
+        btnWholesaler.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white";
+        retailerView.classList.remove('hidden');
+        wholesalerView.classList.add('hidden');
+        unlockedView.classList.add('hidden');
+        retailerPill.classList.remove('hidden');
+        retailerPill.classList.add('sm:flex');
+        showToast("Switched to Retailer Sourcing Mode");
+      } else {
+        btnWholesaler.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-gold-500 text-navy-950 shadow";
+        btnRetailer.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white";
+        retailerView.classList.add('hidden');
+        wholesalerView.classList.remove('hidden');
+        unlockedView.classList.add('hidden');
+        retailerPill.classList.add('hidden');
+        showToast("Switched to Wholesaler Distribution Hub");
+      }
+    }
+
+    function switchTab(tab) {
+      const retailerView = document.getElementById('retailerView');
+      const wholesalerView = document.getElementById('wholesalerView');
+      const unlockedView = document.getElementById('unlockedView');
+
+      if (tab === 'explore') {
+        setRole('RETAILER');
+      } else if (tab === 'unlocked') {
+        retailerView.classList.add('hidden');
+        wholesalerView.classList.add('hidden');
+        unlockedView.classList.remove('hidden');
+        renderUnlockedDirectory();
+      }
+    }
+
+    // --- Render Category Chips ---
+    function renderCategoryChips() {
+      const container = document.getElementById('categoryChipsContainer');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const isActive = selectedCategory === cat.id;
+        const activeClass = isActive 
+          ? 'bg-navy-900 text-gold-400 border-navy-900 shadow-sm' 
+          : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200';
+        return `
+          <button 
+            onclick="handleCategorySelect('${cat.id}')"
+            class="px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${activeClass}"
+          >
+            <i class="fa-solid ${cat.icon} text-sm"></i>
+            <span>${cat.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderVoicePresets() {
+      const container = document.getElementById('voicePresetsContainer');
+      container.innerHTML = VOICE_PROMPTS.map(p => `
+        <div 
+          onclick="applyVoiceSearchQuery('${p}')"
+          class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-navy-600 hover:bg-navy-50 cursor-pointer flex items-center gap-2 text-xs font-semibold text-slate-700 transition"
+        >
+          <i class="fa-solid fa-record-voice-over text-navy-600"></i>
+          <span>"${p}"</span>
+        </div>
+      `).join('');
+    }
+
+    // --- Filters & Search Handlers ---
+    function handleSearch(val) {
+      searchQuery = val.toLowerCase().trim();
+      renderWholesalers();
+    }
+
+    function handleCategorySelect(catId) {
+      selectedCategory = catId;
+      renderCategoryChips();
+      renderWholesalers();
+    }
+
+    function handleAreaChange(area) {
+      selectedArea = area;
+      renderWholesalers();
+    }
+
+    function handleSortChange(sort) {
+      selectedSort = sort;
+      renderWholesalers();
+    }
+
+    function handleVerifiedToggle(checked) {
+      verifiedOnly = checked;
+      renderWholesalers();
+    }
+
+    function filterByPreset(area, category) {
+      selectedArea = area;
+      document.getElementById('selectArea').value = area;
+      renderWholesalers();
+      showToast(`Filtered by ${area}`);
+    }
+
+    function resetFilters() {
+      searchQuery = '';
+      selectedCategory = '';
+      selectedArea = '';
+      selectedSort = 'standing';
+      verifiedOnly = false;
+      document.getElementById('searchInput').value = '';
+      document.getElementById('selectArea').value = '';
+      document.getElementById('selectSort').value = 'standing';
+      document.getElementById('checkVerifiedOnly').checked = false;
+      renderCategoryChips();
+      renderWholesalers();
+      showToast("Filters Reset");
+    }
+
+    // --- Render Wholesalers Grid ---
+    function renderWholesalers() {
+      const container = document.getElementById('wholesalersGrid');
+      
+      // Filter Logic
+      let filtered = wholesalers.filter(ws => {
+        const matchesQuery = searchQuery === '' ||
+          ws.businessName.toLowerCase().includes(searchQuery) ||
+          ws.area.toLowerCase().includes(searchQuery) ||
+          ws.categories.some(c => c.toLowerCase().includes(searchQuery)) ||
+          ws.brandsDealtIn.some(b => b.toLowerCase().includes(searchQuery));
+
+        const matchesCat = selectedCategory === '' || ws.categories.includes(selectedCategory);
+        const matchesArea = selectedArea === '' || ws.area.toLowerCase().includes(selectedArea.toLowerCase());
+        const matchesVerified = !verifiedOnly || (ws.isVerified && ws.isJdVerified);
+
+        return matchesQuery && matchesCat && matchesArea && matchesVerified;
+      });
+
+      // Sorting Logic
+      if (selectedSort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      } else if (selectedSort === 'mov_low') {
+        filtered.sort((a, b) => parseInt(a.minOrderValue.replace(/\D/g, '')) - parseInt(b.minOrderValue.replace(/\D/g, '')));
+      } else if (selectedSort === 'standing') {
+        filtered.sort((a, b) => b.marketStandingYears - a.marketStandingYears);
+      }
+
+      document.getElementById('resultsCountBadge').innerText = `${filtered.length} Wholesalers Found`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-xl">
+              <i class="fa-solid fa-store-slash"></i>
+            </div>
+            <h4 class="font-extrabold text-navy-900">No Wholesalers Match Your Filter</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Try clearing search terms or selecting 'All Mandis & Cities' to see master distributors.</p>
+            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold">Reset Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(ws => {
+        const isUnlocked = unlockedWholesalerIds.has(ws.id);
+        const freeUnlocksAvailable = freeUnlocksRemaining > 0;
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+            
+            <!-- Card Header -->
+            <div class="space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h4 class="text-base font-extrabold text-navy-900 hover:text-navy-700 cursor-pointer" onclick="openDetailModal('${ws.id}')">
+                      ${ws.businessName}
+                    </h4>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                      <i class="fa-solid fa-badge-check"></i> JD & GST VERIFIED
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap">
+                    <span><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>${ws.area}, ${ws.city}</span>
+                    <span>•</span>
+                    <span class="text-gold-600 font-bold"><i class="fa-solid fa-star text-gold-500 mr-1"></i>${ws.rating} (${ws.reviewsCount} verified reviews)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Trust Badge: Direct Mill Rate & Mandi Standing -->
+              <div class="bg-navy-50 border border-navy-200 rounded-xl p-2.5 flex items-center gap-2 text-xs">
+                <i class="fa-solid fa-award text-gold-600 text-base"></i>
+                <div>
+                  <span class="font-extrabold text-navy-900">Direct Mill Rate • ${ws.marketStandingYears}+ Years Mandi Standing</span>
+                  <p class="text-[11px] text-slate-600">Zero broker cuts. Direct truckload & carton supply.</p>
+                </div>
+              </div>
+
+              <!-- Metrics Row: MOV, SLA, Deals -->
+              <div class="grid grid-cols-3 gap-2 py-1 text-center text-xs bg-slate-50 rounded-xl p-2 border border-slate-100">
+                <div>
+                  <div class="text-[10px] text-slate-500 font-medium">Min Order</div>
+                  <div class="font-bold text-navy-900">${ws.minOrderValue}</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-slate-500 font-medium">Dispatch Time</div>
+                  <div class="font-bold text-emerald-700">${ws.deliveryTime}</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-slate-500 font-medium">Deals Done</div>
+                  <div class="font-bold text-slate-800">${ws.dealsCompleted}+</div>
+                </div>
+              </div>
+
+              <!-- Brands Dealt In Chips -->
+              <div class="space-y-1">
+                <div class="text-[11px] font-bold text-slate-500">BRANDS DEALT IN:</div>
+                <div class="flex flex-wrap gap-1.5">
+                  ${ws.brandsDealtIn.map(b => `
+                    <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold">
+                      ${b}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Actions -->
+            <div class="space-y-2 pt-2 border-t border-slate-100">
+              
+              <!-- Direct WhatsApp RFQ Button (Primary Instant Action) -->
+              <button 
+                onclick="openRfqModal('${ws.id}')"
+                class="w-full py-2.5 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition"
+              >
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                Direct WhatsApp RFQ (Get Rate Card)
+              </button>
+
+              <!-- Locked vs Unlocked Contact UI -->
+              ${isUnlocked ? `
+                <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-3 space-y-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-emerald-800"><i class="fa-solid fa-lock-open text-emerald-600 mr-1"></i> Contact Details Unlocked</span>
+                    <span class="text-[10px] font-bold text-slate-500">GST: ${ws.gstin}</span>
+                  </div>
+                  <div class="text-xs font-bold text-slate-900">${ws.phone} (${ws.contactPerson})</div>
+                  <div class="text-[11px] text-slate-600">${ws.address}</div>
+                  
+                  <div class="flex gap-2 pt-1">
+                    <a href="tel:${ws.phone}" class="flex-1 py-1.5 rounded-lg bg-navy-900 text-white font-bold text-xs text-center">
+                      <i class="fa-solid fa-phone mr-1"></i> Call
+                    </a>
+                    <button onclick="openDetailModal('${ws.id}')" class="flex-1 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-bold text-xs">
+                      View Profile
+                    </button>
+                  </div>
+                </div>
+              ` : `
+                <div class="space-y-2">
+                  <button 
+                    onclick="openUnlockModal('${ws.id}')"
+                    class="w-full py-2.5 rounded-xl ${freeUnlocksAvailable ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-navy-900 hover:bg-navy-800'} text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow transition"
+                  >
+                    <i class="fa-solid fa-lock-open"></i>
+                    <span>${freeUnlocksAvailable ? '⚡ Free Trial Unlock Contact (₹0 Fee)' : 'Unlock Phone & Warehouse (₹49)'}</span>
+                  </button>
+                  <div class="flex items-center justify-between text-[11px] text-slate-500 px-1">
+                    <span>Phone & exact warehouse locked</span>
+                    <button onclick="openDetailModal('${ws.id}')" class="text-navy-600 font-bold hover:underline">Full Details &gt;</button>
+                  </div>
+                </div>
+              `}
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- Render Unlocked Suppliers Directory ---
+    function renderUnlockedDirectory() {
+      const container = document.getElementById('unlockedListContainer');
+      const unlockedList = wholesalers.filter(ws => unlockedWholesalerIds.has(ws.id));
+      document.getElementById('unlockedBadgeCount').innerText = unlockedList.length;
+
+      if (unlockedList.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
+            <i class="fa-solid fa-address-book text-4xl text-slate-300"></i>
+            <h4 class="font-extrabold text-navy-900">No Unlocked Wholesalers Yet</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Use your 3 Free Trial Unlocks to reveal verified direct suppliers in Sadar Bazar, APMC Vashi and Surat.</p>
+            <button onclick="switchTab('explore')" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold">Explore Suppliers</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = unlockedList.map(ws => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+          <div class="flex items-start justify-between">
+            <div>
+              <h4 class="font-extrabold text-navy-900 text-base">${ws.businessName}</h4>
+              <p class="text-xs text-slate-500">Contact: <strong>${ws.contactPerson}</strong> • ${ws.area}, ${ws.city}</p>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">UNLOCKED</span>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-3 text-xs space-y-1 border border-slate-200">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-phone text-navy-700"></i> Phone: ${ws.phone}
+            </div>
+            <div class="text-slate-600 flex items-start gap-1.5">
+              <i class="fa-solid fa-location-dot text-rose-500 mt-0.5"></i> ${ws.address}
+            </div>
+            <div class="text-slate-500 text-[11px]">GSTIN: ${ws.gstin}</div>
+          </div>
+
+          <div class="flex gap-2">
+            <a href="tel:${ws.phone}" class="flex-1 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold text-center">
+              <i class="fa-solid fa-phone mr-1"></i> Call Supplier
+            </a>
+            <button onclick="openRfqModal('${ws.id}')" class="flex-1 py-2 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white text-xs font-bold">
+              <i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp RFQ
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Render Wholesaler Dashboard Inquiries ---
+    function renderWholesalerInquiries() {
+      const container = document.getElementById('wholesalerInquiriesContainer');
+      container.innerHTML = wholesalerInquiries.map(inq => `
+        <div class="p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-navy-900 text-sm">${inq.retailerName}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${inq.status === 'Unanswered' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${inq.status}</span>
+              <span class="text-slate-400 text-[11px]">${inq.time}</span>
+            </div>
+            <p class="text-slate-700 font-medium">${inq.requirement} (${inq.quantity})</p>
+            <div class="text-slate-500 text-[11px]">Phone: ${inq.phone}</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="https://api.whatsapp.com/send?phone=${inq.phone.replace(/[^0-9]/g, '')}&text=Namaste!%20Replying%20to%20your%20RFQ%20on%20SaudagarConnection." target="_blank" class="px-3 py-2 rounded-lg bg-whatsapp text-white font-bold flex items-center gap-1">
+              <i class="fa-brands fa-whatsapp"></i> Reply on WhatsApp
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Update Unlocks Remaining UI ---
+    function updateUnlockUI() {
+      document.getElementById('navUnlocksLeft').innerText = `${freeUnlocksRemaining} Free Unlocks Left`;
+      document.getElementById('trialQuotaText').innerText = `${freeUnlocksRemaining} of 3 Available`;
+      const pct = (freeUnlocksRemaining / 3) * 100;
+      document.getElementById('trialProgressBar').style.width = `${pct}%`;
+      
+      const modalTrialOpt = document.getElementById('unlockTrialOption');
+      const modalFreeCount = document.getElementById('modalFreeCount');
+      if (modalFreeCount) modalFreeCount.innerText = freeUnlocksRemaining;
+      if (modalTrialOpt) {
+        if (freeUnlocksRemaining <= 0) {
+          modalTrialOpt.classList.add('hidden');
+        } else {
+          modalTrialOpt.classList.remove('hidden');
+        }
+      }
+    }
+
+    // --- Modal Triggers ---
+    function openVoiceSearchModal() {
+      document.getElementById('voiceStatusText').innerText = 'Listening... Speak in Hindi or English';
+      document.getElementById('voiceModal').classList.remove('hidden');
+    }
+
+    function applyVoiceSearchQuery(query) {
+      searchQuery = query.toLowerCase();
+      document.getElementById('searchInput').value = query;
+      closeModal('voiceModal');
+      renderWholesalers();
+      showToast(`Voice Search: "${query}"`);
+    }
+
+    function openRfqModal(wsId) {
+      targetWholesaler = wholesalers.find(w => w.id === wsId);
+      if (!targetWholesaler) return;
+
+      document.getElementById('rfqWholesalerName').innerText = `To: ${targetWholesaler.businessName} (${targetWholesaler.area})`;
+      document.getElementById('rfqRequirementInput').value = `Wholesale bulk requirement for ${targetWholesaler.brandsDealtIn.slice(0, 3).join(', ')} products. Please share Direct Mill Rate card.`;
+      document.getElementById('rfqModal').classList.remove('hidden');
+    }
+
+    function sendDirectWhatsAppRfq() {
+      if (!targetWholesaler) return;
+      const req = document.getElementById('rfqRequirementInput').value;
+      const qty = document.getElementById('rfqQuantityInput').value;
+      const store = document.getElementById('rfqStoreNameInput').value;
+      const pin = document.getElementById('rfqPincodeInput').value;
+
+      const formattedMsg = `Namaste ${targetWholesaler.businessName}!\n\nI am contacting you from ${store} (${pin}). We found your verified profile on SaudagarConnection.\n\n*Direct RFQ Requirement*:\n• Items: ${req}\n• Quantity: ${qty}\n\nPlease send your best Direct Mill / Wholesale Rate card and dispatch delivery timeline.\nDhanyawad!`;
+      
+      const cleanPhone = targetWholesaler.phone.replace(/[^0-9]/g, '');
+      const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(formattedMsg)}`;
+
+      // Record in local inquiries
+      wholesalerInquiries.unshift({
+        id: 'inq-' + Date.now(),
+        retailerName: store,
+        phone: '+91 98765 43210',
+        requirement: req,
+        quantity: qty,
+        time: 'Just now',
+        status: 'Sent via WhatsApp'
+      });
+      renderWholesalerInquiries();
+
+      closeModal('rfqModal');
+      window.open(waUrl, '_blank');
+      showToast("Opening WhatsApp with structured RFQ...");
+    }
+
+    function openUnlockModal(wsId) {
+      targetWholesaler = wholesalers.find(w => w.id === wsId);
+      if (!targetWholesaler) return;
+
+      document.getElementById('unlockWholesalerTitle').innerText = `${targetWholesaler.businessName} (${targetWholesaler.area})`;
+      updateUnlockUI();
+      document.getElementById('unlockModal').classList.remove('hidden');
+    }
+
+    function executeTrialUnlock() {
+      if (!targetWholesaler) return;
+      if (freeUnlocksRemaining > 0) {
+        freeUnlocksRemaining--;
+      }
+      unlockedWholesalerIds.add(targetWholesaler.id);
+      updateUnlockUI();
+      closeModal('unlockModal');
+      renderWholesalers();
+      renderUnlockedDirectory();
+      showToast(`🎉 Free Trial Unlock Applied! (${freeUnlocksRemaining} free unlocks remaining)`);
+    }
+
+    function executePaidUnlock(method) {
+      if (!targetWholesaler) return;
+      unlockedWholesalerIds.add(targetWholesaler.id);
+      closeModal('unlockModal');
+      renderWholesalers();
+      renderUnlockedDirectory();
+      showToast(`₹49 Payment Successful via ${method}! Contact Unlocked.`);
+    }
+
+    function openDetailModal(wsId) {
+      const ws = wholesalers.find(w => w.id === wsId);
+      if (!ws) return;
+
+      const isUnlocked = unlockedWholesalerIds.has(ws.id);
+      const content = document.getElementById('detailModalContent');
+
+      content.innerHTML = `
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-navy-900 text-gold-400 flex items-center justify-center font-bold text-lg">
+              <i class="fa-solid fa-warehouse"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-navy-900 text-base">${ws.businessName}</h3>
+              <p class="text-xs text-slate-500">${ws.area}, ${ws.city}</p>
+            </div>
+          </div>
+          <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-slate-600 p-1">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          
+          <div class="bg-navy-50 border border-navy-200 rounded-xl p-3">
+            <div class="font-extrabold text-navy-900 text-sm">Direct Mill Rate & Mandi Standing Guarantee</div>
+            <p class="text-slate-700 mt-1">${ws.marketStandingYears}+ Years in ${ws.area}. Verified 100% genuine factory wholesale rates with no middleman margins.</p>
+          </div>
+
+          <div>
+            <h5 class="font-bold text-slate-900 mb-1">About This Wholesaler:</h5>
+            <p class="text-slate-600 leading-relaxed">${ws.description}</p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div>
+              <div class="text-slate-500 font-medium">Min Order</div>
+              <div class="font-bold text-navy-900 text-sm">${ws.minOrderValue}</div>
+            </div>
+            <div>
+              <div class="text-slate-500 font-medium">Dispatch SLA</div>
+              <div class="font-bold text-emerald-700 text-sm">${ws.deliveryTime}</div>
+            </div>
+            <div>
+              <div class="text-slate-500 font-medium">Response SLA</div>
+              <div class="font-bold text-navy-900 text-sm">${ws.responseTime}</div>
+            </div>
+            <div>
+              <div class="text-slate-500 font-medium">Verified Deals</div>
+              <div class="font-bold text-slate-900 text-sm">${ws.dealsCompleted}+</div>
+            </div>
+          </div>
+
+          <div>
+            <h5 class="font-bold text-slate-900 mb-1.5">Authorized Brands & Product Lines:</h5>
+            <div class="flex flex-wrap gap-1.5">
+              ${ws.brandsDealtIn.map(b => `<span class="px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-slate-800 border border-slate-200">${b}</span>`).join('')}
+            </div>
+          </div>
+
+          <!-- Contact Reveal Box -->
+          <div class="p-3.5 rounded-xl border ${isUnlocked ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-100 border-slate-200'} space-y-2">
+            <div class="font-bold ${isUnlocked ? 'text-emerald-900' : 'text-slate-700'}">
+              ${isUnlocked ? 'Direct Contact Revealed:' : 'Contact & Warehouse Details (Locked)'}
+            </div>
+            ${isUnlocked ? `
+              <div class="text-sm font-extrabold text-slate-900">${ws.phone} (${ws.contactPerson})</div>
+              <div class="text-slate-700">${ws.address}</div>
+              <div class="text-slate-500">GSTIN: ${ws.gstin}</div>
+            ` : `
+              <p class="text-slate-500">Unlock to view exact shop number, mobile, and warehouse gate pass.</p>
+            `}
+          </div>
+
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <button onclick="closeModal('detailModal'); openRfqModal('${ws.id}')" class="flex-1 py-3 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp"></i> Send Direct WhatsApp RFQ
+          </button>
+          ${!isUnlocked ? `
+            <button onclick="closeModal('detailModal'); openUnlockModal('${ws.id}')" class="flex-1 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs sm:text-sm">
+              Unlock Contact
+            </button>
+          ` : ''}
+        </div>
+      `;
+
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function openWholesalerRegistrationModal() {
+      document.getElementById('onboardModal').classList.remove('hidden');
+    }
+
+    function handleWholesalerRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regFirmName').value;
+      const area = document.getElementById('regArea').value;
+      const phone = document.getElementById('regPhone').value;
+      const cat = document.getElementById('regCategory').value;
+      const years = parseInt(document.getElementById('regYears').value) || 10;
+      const brands = document.getElementById('regBrands').value.split(',').map(s => s.trim());
+      const gstin = document.getElementById('regGstin').value || '07AABCM9999P1Z2';
+
+      const newWs = {
+        id: 'ws-' + Date.now(),
+        businessName: name,
+        contactPerson: 'Authorized Proprietor',
+        phone: phone,
+        email: 'sales@' + name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.in',
+        address: `Shop 12, Main Mandi Road, ${area}`,
+        city: area.includes('Delhi') ? 'Delhi NCR' : 'Trade Hub',
+        area: area,
+        categories: [cat],
+        brandsDealtIn: brands,
+        gstin: gstin,
+        rating: 5.0,
+        reviewsCount: 1,
+        dealsCompleted: 10,
+        minOrderValue: '₹10,000',
+        deliveryTime: 'Same Day Dispatch',
+        responseTime: 'Within 5 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: years,
+        marketStandingNote: `${years}+ Years Direct Mandi Standing`,
+        description: `Verified master distributor in ${area} specializing in ${brands.join(', ')} with Direct Mill Rate supply guarantee.`
+      };
+
+      wholesalers.unshift(newWs);
+      closeModal('onboardModal');
+      setRole('RETAILER');
+      renderWholesalers();
+      showToast(`🎉 "${name}" is now LIVE on SaudagarConnection!`);
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toastMessage');
+      msgEl.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
