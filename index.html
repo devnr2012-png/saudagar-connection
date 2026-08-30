@@ -48,10 +48,6 @@
               dark: '#128C7E',
               hover: '#20BA56'
             }
-          },
-          animation: {
-            'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
           }
         }
       }
@@ -82,12 +78,67 @@
       scrollbar-width: none;
     }
     .modal-backdrop {
-      background-color: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(4px);
+      background-color: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
     }
   </style>
 </head>
 <body class="h-full font-sans text-slate-800 antialiased flex flex-col bg-slate-50">
+
+  <!-- ================= MANDATORY LOGIN & ROLE SELECTION MODAL (AUTH GATEWAY) ================= -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 transform transition-all">
+      
+      <!-- Logo Header -->
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20 text-navy-950 font-extrabold text-2xl mx-auto">
+          <i class="fa-solid fa-handshake"></i>
+        </div>
+        <h2 class="text-2xl font-extrabold text-navy-900 tracking-tight">Welcome to Saudagar<span class="text-gold-600">Connection</span></h2>
+        <p class="text-xs text-slate-500">India's First Direct B2B Wholesale & Retail Matchmaking Directory</p>
+      </div>
+
+      <!-- Role Selection Tabs -->
+      <div class="space-y-3">
+        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Select Your Business Role:</label>
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" id="authRoleRetailerBtn" onclick="selectAuthRole('RETAILER')" class="p-3.5 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-2 transition shadow-sm">
+            <i class="fa-solid fa-store text-lg text-navy-900"></i>
+            <span>I am a Retailer / Shop Owner</span>
+          </button>
+          <button type="button" id="authRoleWholesalerBtn" onclick="selectAuthRole('WHOLESALER')" class="p-3.5 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-2 transition hover:border-slate-300">
+            <i class="fa-solid fa-warehouse text-lg text-slate-400"></i>
+            <span>I am a Wholesaler / Stockist</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Number / Login Form -->
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">WhatsApp / Mobile Number:</label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3 text-slate-400 font-bold">+91</span>
+            <input type="tel" id="authPhoneInput" required placeholder="98110 XXXXX" maxlength="10" class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-sm font-bold focus:ring-2 focus:ring-navy-600 focus:outline-none">
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Instant OTP verification & secure B2B networking.</p>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-sm shadow-lg shadow-navy-900/20 transition flex items-center justify-center gap-2">
+          <span>Continue to App</span>
+          <i class="fa-solid fa-arrow-right text-xs text-gold-400"></i>
+        </button>
+      </form>
+
+      <!-- Trust footer in auth -->
+      <div class="pt-2 border-t border-slate-100 flex items-center justify-center gap-4 text-[11px] text-slate-400 font-semibold">
+        <span><i class="fa-solid fa-shield-check text-emerald-500 mr-1"></i> GST Verified</span>
+        <span>•</span>
+        <span><i class="fa-solid fa-lock text-gold-500 mr-1"></i> 100% Secure</span>
+      </div>
+
+    </div>
+  </div>
 
   <!-- ================= TOP HEADER & NAVIGATION ================= -->
   <header class="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
@@ -156,16 +207,16 @@
         <span class="flex items-center text-gold-400 font-bold">
           <i class="fa-solid fa-bolt mr-1.5 text-gold-400"></i> LIVE MANDI STANDING:
         </span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Khari Baoli', 'Grocery')">📍 Khari Baoli (Spices & Dryfruits)</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Khari Baoli', 'Grocery & FMCG')">📍 Khari Baoli (Spices & Dryfruits)</span>
         <span class="text-slate-600">•</span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Sadar Bazar', 'Cosmetics')">📍 Sadar Bazar (FMCG & General)</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Sadar Bazar', 'Cosmetics & Personal Care')">📍 Sadar Bazar (FMCG & General)</span>
         <span class="text-slate-600">•</span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Surat Textile Market', 'Textiles')">📍 Surat Textile Hub (Direct Mill Sarees)</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Surat Textile Market', 'Textiles & Garments')">📍 Surat Textile Hub (Direct Mill Sarees)</span>
         <span class="text-slate-600">•</span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('APMC Vashi', 'Grocery')">📍 APMC Vashi (Grains & Edible Oil)</span>
+        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('APMC Vashi', 'Grocery & FMCG')">📍 APMC Vashi (Grains & Edible Oil)</span>
       </div>
       <div class="flex items-center gap-3 text-slate-400">
-        <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-badge-check"></i> 100% GST & Udyam Verified</span>
+        <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-certificate"></i> 100% GST & Udyam Verified</span>
       </div>
     </div>
   </div>
@@ -281,7 +332,7 @@
               class="px-3 py-2 bg-navy-50 hover:bg-navy-100 text-navy-700 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-navy-200 transition"
               title="Voice Search (आवाज़ से खोजें)"
             >
-              <i class="fa-solid fa-microphone text-navy-600 animate-pulse"></i>
+              <i class="fa-solid fa-microphone text-navy-600"></i>
               <span class="hidden sm:inline">Voice</span>
             </button>
           </div>
@@ -308,9 +359,7 @@
               <option value="Khari Baoli">Khari Baoli Spice Mandi, Delhi</option>
               <option value="APMC Vashi">APMC Vashi, Navi Mumbai</option>
               <option value="Surat Textile Market">Surat Textile Hub, Gujarat</option>
-              <option value="Gandhi Nagar">Gandhi Nagar Garments, Delhi</option>
               <option value="SP Road">SP Road Electronics, Bangalore</option>
-              <option value="Crawford Market">Crawford Market, Mumbai</option>
               <option value="Wholesale Mandi Kanpur">Wholesale Mandi, Kanpur</option>
             </select>
           </div>
@@ -328,7 +377,7 @@
           <div class="flex items-end">
             <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 w-full cursor-pointer hover:bg-slate-50 transition">
               <input type="checkbox" id="checkVerifiedOnly" onchange="handleVerifiedToggle(this.checked)" class="rounded text-navy-600 focus:ring-navy-500 h-4 w-4">
-              <span class="font-bold text-slate-700">100% Justdial & GST Verified Only</span>
+              <span class="font-bold text-slate-700">100% GST & Mill Verified Only</span>
             </label>
           </div>
         </div>
@@ -340,7 +389,7 @@
         <div>
           <h3 class="text-lg font-extrabold text-navy-900 flex items-center gap-2">
             Verified Wholesalers & Master Stockists
-            <span id="resultsCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-navy-100 text-navy-800 font-bold">12 Found</span>
+            <span id="resultsCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-navy-100 text-navy-800 font-bold">6 Found</span>
           </h3>
           <p class="text-xs text-slate-500">Direct factory prices, full GST invoices & bulk dispatch guarantees</p>
         </div>
@@ -467,7 +516,7 @@
       </div>
       <div class="border-t border-navy-800/80 pt-4 flex flex-col sm:flex-row items-center justify-between text-slate-400 text-[11px] gap-2">
         <p>© 2026 SaudagarConnection. Built for Indian Local Wholesalers, Stockists & Kirana Store Owners.</p>
-        <p>Ready for GitHub Pages hosting with Tailwind CSS & Vanilla JS.</p>
+        <p>Single-File Static Web App for GitHub Pages.</p>
       </div>
     </div>
   </footer>
@@ -476,7 +525,7 @@
   <!-- MODAL 1: VOICE SEARCH MODAL (आवाज़ से खोजें)                  -->
   <!-- ============================================================== -->
   <div id="voiceModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-200 animate-in fade-in zoom-in duration-200">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-200">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-sm">
@@ -586,7 +635,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- MODAL 3: CONTACT UNLOCK / RAZORPAY PAYMENT SIMULATOR           -->
+  <!-- MODAL 3: CONTACT UNLOCK / PAYMENT MODAL                        -->
   <!-- ============================================================== -->
   <div id="unlockModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-200">
@@ -654,7 +703,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- MODAL 4: WHOLESALER FULL PROFILE DRAWER                        -->
+  <!-- MODAL 4: WHOLESALER FULL PROFILE MODAL                         -->
   <!-- ============================================================== -->
   <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto" id="detailModalContent">
@@ -708,7 +757,6 @@
               <option value="Electronics & Mobile">Electronics & Mobile</option>
               <option value="Cosmetics & Personal Care">Cosmetics & Personal Care</option>
               <option value="Hardware & Sanitary">Hardware & Sanitary</option>
-              <option value="Footwear & Leather">Footwear & Leather</option>
             </select>
           </div>
           <div>
@@ -901,79 +949,87 @@
     ];
 
     const CATEGORIES = [
-      { id: '', name: 'All Categories', icon: 'fa-layer-group', count: 12 },
-      { id: 'Grocery & FMCG', name: 'Grocery & FMCG', icon: 'fa-basket-shopping', count: 5 },
-      { id: 'Textiles & Garments', name: 'Textiles & Garments', icon: 'fa-shirt', count: 3 },
-      { id: 'Electronics & Mobile', name: 'Electronics & Spares', icon: 'fa-mobile-screen', count: 2 },
-      { id: 'Cosmetics & Personal Care', name: 'Cosmetics & Beauty', icon: 'fa-wand-magic-sparkles', count: 2 },
-      { id: 'Hardware & Sanitary', name: 'Hardware & Pipes', icon: 'fa-wrench', count: 1 }
+      { id: '', name: 'All Categories', icon: 'fa-layer-group' },
+      { id: 'Grocery & FMCG', name: 'Grocery & FMCG', icon: 'fa-basket-shopping' },
+      { id: 'Textiles & Garments', name: 'Textiles & Garments', icon: 'fa-shirt' },
+      { id: 'Electronics & Mobile', name: 'Electronics & Spares', icon: 'fa-mobile-screen' },
+      { id: 'Cosmetics & Personal Care', name: 'Cosmetics & Beauty', icon: 'fa-wand-magic-sparkles' },
+      { id: 'Hardware & Sanitary', name: 'Hardware & Sanitary', icon: 'fa-wrench' }
     ];
 
     const VOICE_PROMPTS = [
-      "Tata Tea Wholesaler in Sadar Bazar",
-      "Surat Cotton Sarees Direct Mill Rate",
-      "APMC Grain Market Vashi Edible Oils",
-      "Boat Fast Chargers SP Road Bangalore",
-      "MDH Masala Distributor Khari Baoli",
-      "Lakme Cosmetics Carton Rate Sadar Bazar"
+      { text: "Tata Tea & Surf Excel Wholesaler in APMC Vashi", category: "Grocery & FMCG", area: "APMC Vashi" },
+      { text: "Surat Cotton Sarees Direct Mill Rate Supplier", category: "Textiles & Garments", area: "Surat Textile Market" },
+      { text: "Khari Baoli MDH & Everest Masala Master Stockist", category: "Grocery & FMCG", area: "Khari Baoli" },
+      { text: "Boat & Noise Earbuds Accessories Wholesale SP Road", category: "Electronics & Mobile", area: "SP Road" },
+      { text: "Sadar Bazar Lakme & Nivea Cosmetics Bulk Supplier", category: "Cosmetics & Personal Care", area: "Sadar Bazar" }
+    ];
+
+    const SAMPLE_INQUIRIES = [
+      { id: 'inq-1', retailerName: 'Shree Sai Supermarket (Andheri East, Mumbai)', items: 'Fortune Refined Sunflower Oil (15L Tins) x 40, Tata Salt 1kg x 20 Cartons', timestamp: '12 mins ago', status: 'Pending RFQ' },
+      { id: 'inq-2', retailerName: 'Radhe Krishna Saree Kendra (Varanasi)', items: 'Surat Pure Silk & Cotton Zari Sarees Wholesale Catalog x 150 Pcs', timestamp: '45 mins ago', status: 'Responded on WhatsApp' },
+      { id: 'inq-3', retailerName: 'Gupta Mobile & Tech World (Noida Sector 18)', items: 'Boat Bassheads + 65W GaN Fast Chargers x 100 Units', timestamp: '2 hours ago', status: 'Deal In Progress' }
     ];
 
     // --- State Management ---
-    let wholesalers = [...INITIAL_WHOLESALERS];
-    let currentRole = 'RETAILER';
-    let freeUnlocksRemaining = 3;
-    let unlockedWholesalerIds = new Set(['ws-1']); // Initial unlocked demo
-    let searchQuery = '';
-    let selectedCategory = '';
-    let selectedArea = '';
-    let selectedSort = 'standing';
-    let verifiedOnly = false;
-    let targetWholesaler = null;
+    let state = {
+      role: 'RETAILER', // 'RETAILER' or 'WHOLESALER'
+      wholesalers: [...INITIAL_WHOLESALERS],
+      unlockedIds: ['ws-1'], // ws-1 unlocked by default
+      freeUnlocksRemaining: 3,
+      searchQuery: '',
+      selectedCategory: '',
+      selectedArea: '',
+      selectedSort: 'standing',
+      verifiedOnly: false,
+      selectedWholesalerForAction: null,
+      authRole: 'RETAILER'
+    };
 
-    // --- Inquiries Database ---
-    let wholesalerInquiries = [
-      {
-        id: 'inq-1',
-        retailerName: 'Gupta Kirana Superstore (Noida)',
-        phone: '+91 98188 12345',
-        requirement: '50 Cartons Fortune Sunlite Oil & 30 Bags Tata Salt',
-        quantity: 'Bulk Truckload',
-        time: '12 mins ago',
-        status: 'Unanswered'
-      },
-      {
-        id: 'inq-2',
-        retailerName: 'Shree Radhey Garments (Jaipur)',
-        phone: '+91 94140 55667',
-        requirement: '200 Pieces Pure Chanderi Sarees Direct Mill Rate',
-        quantity: 'Trial Carton Dispatch',
-        time: '34 mins ago',
-        status: 'Quotation Sent'
-      },
-      {
-        id: 'inq-3',
-        retailerName: 'Bangalore Mobile Zone (Indiranagar)',
-        phone: '+91 99000 88776',
-        requirement: '100 Boat Type-C 65W Fast Chargers + Earphones',
-        quantity: 'Direct Courier',
-        time: '1 hour ago',
-        status: 'Contact Unlocked'
-      }
-    ];
-
-    // --- Application Initialization ---
+    // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
       renderCategoryChips();
-      renderVoicePresets();
       renderWholesalers();
-      renderUnlockedDirectory();
+      renderUnlockedList();
       renderWholesalerInquiries();
-      updateUnlockUI();
+      renderVoicePresets();
+      updateTrialBannerUI();
     });
 
-    // --- Role Switching ---
+    // --- Auth Gateway Logic ---
+    function selectAuthRole(role) {
+      state.authRole = role;
+      const retailBtn = document.getElementById('authRoleRetailerBtn');
+      const wholeBtn = document.getElementById('authRoleWholesalerBtn');
+
+      if (role === 'RETAILER') {
+        retailBtn.className = 'p-3.5 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-2 transition shadow-sm';
+        wholeBtn.className = 'p-3.5 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-2 transition hover:border-slate-300';
+      } else {
+        wholeBtn.className = 'p-3.5 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-2 transition shadow-sm';
+        retailBtn.className = 'p-3.5 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-2 transition hover:border-slate-300';
+      }
+    }
+
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      const phone = document.getElementById('authPhoneInput').value;
+      if (phone.length < 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+
+      // Hide Auth Modal
+      document.getElementById('authModal').classList.add('hidden');
+
+      // Set App Role based on login selection
+      setRole(state.authRole);
+      showToast(`Welcome! Logged in successfully as ${state.authRole}`, 'fa-check-circle');
+    }
+
+    // --- Navigation & Role Switching ---
     function setRole(role) {
-      currentRole = role;
+      state.role = role;
       const btnRetailer = document.getElementById('btnRoleRetailer');
       const btnWholesaler = document.getElementById('btnRoleWholesaler');
       const retailerView = document.getElementById('retailerView');
@@ -982,22 +1038,21 @@
       const retailerPill = document.getElementById('retailerUnlocksPill');
 
       if (role === 'RETAILER') {
-        btnRetailer.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-gold-500 text-navy-950 shadow";
-        btnWholesaler.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white";
+        btnRetailer.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 bg-gold-500 text-navy-950 shadow';
+        btnWholesaler.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white';
         retailerView.classList.remove('hidden');
         wholesalerView.classList.add('hidden');
         unlockedView.classList.add('hidden');
         retailerPill.classList.remove('hidden');
-        retailerPill.classList.add('sm:flex');
-        showToast("Switched to Retailer Sourcing Mode");
+        showToast('Switched to Retailer Sourcing Mode (Direct Mill Rates)', 'fa-store');
       } else {
-        btnWholesaler.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-gold-500 text-navy-950 shadow";
-        btnRetailer.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white";
-        retailerView.classList.add('hidden');
+        btnWholesaler.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 bg-gold-500 text-navy-950 shadow';
+        btnRetailer.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white';
         wholesalerView.classList.remove('hidden');
+        retailerView.classList.add('hidden');
         unlockedView.classList.add('hidden');
         retailerPill.classList.add('hidden');
-        showToast("Switched to Wholesaler Distribution Hub");
+        showToast('Switched to Wholesaler Hub (No Catalogue Needed)', 'fa-warehouse');
       }
     }
 
@@ -1012,248 +1067,235 @@
         retailerView.classList.add('hidden');
         wholesalerView.classList.add('hidden');
         unlockedView.classList.remove('hidden');
-        renderUnlockedDirectory();
+        renderUnlockedList();
       }
     }
 
-    // --- Render Category Chips ---
+    // --- Filter & Search Handlers ---
     function renderCategoryChips() {
       const container = document.getElementById('categoryChipsContainer');
       container.innerHTML = CATEGORIES.map(cat => {
-        const isActive = selectedCategory === cat.id;
-        const activeClass = isActive 
-          ? 'bg-navy-900 text-gold-400 border-navy-900 shadow-sm' 
-          : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200';
+        const isSelected = state.selectedCategory === cat.id;
         return `
           <button 
-            onclick="handleCategorySelect('${cat.id}')"
-            class="px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${activeClass}"
+            onclick="setCategoryFilter('${cat.id}')"
+            class="px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 transition-all ${
+              isSelected 
+                ? 'bg-navy-900 text-white shadow-md shadow-navy-900/20 ring-2 ring-gold-400' 
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+            }"
           >
-            <i class="fa-solid ${cat.icon} text-sm"></i>
-            <span>${cat.name}</span>
+            <i class="fa-solid ${cat.icon} ${isSelected ? 'text-gold-400' : 'text-slate-500'}"></i>
+            ${cat.name}
           </button>
         `;
       }).join('');
     }
 
-    function renderVoicePresets() {
-      const container = document.getElementById('voicePresetsContainer');
-      container.innerHTML = VOICE_PROMPTS.map(p => `
-        <div 
-          onclick="applyVoiceSearchQuery('${p}')"
-          class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-navy-600 hover:bg-navy-50 cursor-pointer flex items-center gap-2 text-xs font-semibold text-slate-700 transition"
-        >
-          <i class="fa-solid fa-record-voice-over text-navy-600"></i>
-          <span>"${p}"</span>
-        </div>
-      `).join('');
-    }
-
-    // --- Filters & Search Handlers ---
-    function handleSearch(val) {
-      searchQuery = val.toLowerCase().trim();
-      renderWholesalers();
-    }
-
-    function handleCategorySelect(catId) {
-      selectedCategory = catId;
+    function setCategoryFilter(categoryId) {
+      state.selectedCategory = categoryId;
       renderCategoryChips();
       renderWholesalers();
     }
 
+    function handleSearch(query) {
+      state.searchQuery = query.toLowerCase().trim();
+      renderWholesalers();
+    }
+
     function handleAreaChange(area) {
-      selectedArea = area;
+      state.selectedArea = area;
       renderWholesalers();
     }
 
-    function handleSortChange(sort) {
-      selectedSort = sort;
+    function handleSortChange(sortOption) {
+      state.selectedSort = sortOption;
       renderWholesalers();
     }
 
-    function handleVerifiedToggle(checked) {
-      verifiedOnly = checked;
+    function handleVerifiedToggle(isVerified) {
+      state.verifiedOnly = isVerified;
       renderWholesalers();
-    }
-
-    function filterByPreset(area, category) {
-      selectedArea = area;
-      document.getElementById('selectArea').value = area;
-      renderWholesalers();
-      showToast(`Filtered by ${area}`);
     }
 
     function resetFilters() {
-      searchQuery = '';
-      selectedCategory = '';
-      selectedArea = '';
-      selectedSort = 'standing';
-      verifiedOnly = false;
+      state.searchQuery = '';
+      state.selectedCategory = '';
+      state.selectedArea = '';
+      state.selectedSort = 'standing';
+      state.verifiedOnly = false;
       document.getElementById('searchInput').value = '';
       document.getElementById('selectArea').value = '';
       document.getElementById('selectSort').value = 'standing';
       document.getElementById('checkVerifiedOnly').checked = false;
       renderCategoryChips();
       renderWholesalers();
-      showToast("Filters Reset");
+      showToast('All filters have been reset', 'fa-rotate-left');
     }
 
-    // --- Render Wholesalers Grid ---
+    function filterByPreset(area, category) {
+      state.selectedArea = area;
+      state.selectedCategory = category;
+      document.getElementById('selectArea').value = area;
+      renderCategoryChips();
+      renderWholesalers();
+      showToast(`Showing suppliers in ${area}`, 'fa-location-dot');
+    }
+
+    // --- Wholesalers List Rendering ---
     function renderWholesalers() {
       const container = document.getElementById('wholesalersGrid');
-      
-      // Filter Logic
-      let filtered = wholesalers.filter(ws => {
-        const matchesQuery = searchQuery === '' ||
-          ws.businessName.toLowerCase().includes(searchQuery) ||
-          ws.area.toLowerCase().includes(searchQuery) ||
-          ws.categories.some(c => c.toLowerCase().includes(searchQuery)) ||
-          ws.brandsDealtIn.some(b => b.toLowerCase().includes(searchQuery));
+      let list = state.wholesalers.filter(ws => {
+        const matchesCat = !state.selectedCategory || ws.categories.includes(state.selectedCategory);
+        const matchesArea = !state.selectedArea || ws.area.toLowerCase().includes(state.selectedArea.toLowerCase());
+        const matchesVerified = !state.verifiedOnly || ws.isVerified;
+        const matchesQuery = !state.searchQuery || 
+          ws.businessName.toLowerCase().includes(state.searchQuery) ||
+          ws.area.toLowerCase().includes(state.searchQuery) ||
+          ws.city.toLowerCase().includes(state.searchQuery) ||
+          ws.brandsDealtIn.some(b => b.toLowerCase().includes(state.searchQuery)) ||
+          ws.categories.some(c => c.toLowerCase().includes(state.searchQuery));
 
-        const matchesCat = selectedCategory === '' || ws.categories.includes(selectedCategory);
-        const matchesArea = selectedArea === '' || ws.area.toLowerCase().includes(selectedArea.toLowerCase());
-        const matchesVerified = !verifiedOnly || (ws.isVerified && ws.isJdVerified);
-
-        return matchesQuery && matchesCat && matchesArea && matchesVerified;
+        return matchesCat && matchesArea && matchesVerified && matchesQuery;
       });
 
-      // Sorting Logic
-      if (selectedSort === 'rating') {
-        filtered.sort((a, b) => b.rating - a.rating);
-      } else if (selectedSort === 'mov_low') {
-        filtered.sort((a, b) => parseInt(a.minOrderValue.replace(/\D/g, '')) - parseInt(b.minOrderValue.replace(/\D/g, '')));
-      } else if (selectedSort === 'standing') {
-        filtered.sort((a, b) => b.marketStandingYears - a.marketStandingYears);
+      // Sorting
+      if (state.selectedSort === 'standing') {
+        list.sort((a, b) => b.marketStandingYears - a.marketStandingYears);
+      } else if (state.selectedSort === 'rating') {
+        list.sort((a, b) => b.rating - a.rating);
+      } else if (state.selectedSort === 'mov_low') {
+        list.sort((a, b) => parseInt(a.minOrderValue.replace(/\D/g, '')) - parseInt(b.minOrderValue.replace(/\D/g, '')));
       }
 
-      document.getElementById('resultsCountBadge').innerText = `${filtered.length} Wholesalers Found`;
+      document.getElementById('resultsCountBadge').innerText = `${list.length} Found`;
 
-      if (filtered.length === 0) {
+      if (list.length === 0) {
         container.innerHTML = `
-          <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
-            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-xl">
-              <i class="fa-solid fa-store-slash"></i>
+          <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
+              <i class="fa-solid fa-search"></i>
             </div>
-            <h4 class="font-extrabold text-navy-900">No Wholesalers Match Your Filter</h4>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto">Try clearing search terms or selecting 'All Mandis & Cities' to see master distributors.</p>
-            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold">Reset Filters</button>
+            <h4 class="font-extrabold text-navy-900 text-base">No Wholesalers Match Your Filter</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Try clearing your filters or search for another brand like Tata, Boat, Everest, or Lakme.</p>
+            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold shadow">
+              Reset Filters
+            </button>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = filtered.map(ws => {
-        const isUnlocked = unlockedWholesalerIds.has(ws.id);
-        const freeUnlocksAvailable = freeUnlocksRemaining > 0;
-
+      container.innerHTML = list.map(ws => {
+        const isUnlocked = state.unlockedIds.includes(ws.id);
         return `
-          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 hover:border-navy-300 hover:shadow-lg transition-all duration-200 p-5 space-y-4 flex flex-col justify-between">
             
             <!-- Card Header -->
             <div class="space-y-2">
               <div class="flex items-start justify-between gap-2">
                 <div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <h4 class="text-base font-extrabold text-navy-900 hover:text-navy-700 cursor-pointer" onclick="openDetailModal('${ws.id}')">
-                      ${ws.businessName}
-                    </h4>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                      <i class="fa-solid fa-badge-check"></i> JD & GST VERIFIED
+                  <h4 class="font-extrabold text-navy-900 text-base leading-tight hover:text-navy-700 cursor-pointer" onclick="openDetailModal('${ws.id}')">
+                    ${ws.businessName}
+                  </h4>
+                  <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
+                    <i class="fa-solid fa-location-dot text-slate-400"></i>
+                    <span>${ws.area}, ${ws.city}</span>
+                    <span>•</span>
+                    <span class="text-gold-600 font-bold flex items-center gap-1">
+                      <i class="fa-solid fa-star text-gold-500 text-[10px]"></i> ${ws.rating} (${ws.reviewsCount})
                     </span>
                   </div>
-                  <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap">
-                    <span><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>${ws.area}, ${ws.city}</span>
-                    <span>•</span>
-                    <span class="text-gold-600 font-bold"><i class="fa-solid fa-star text-gold-500 mr-1"></i>${ws.rating} (${ws.reviewsCount} verified reviews)</span>
+                </div>
+                
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap flex items-center gap-1">
+                  <i class="fa-solid fa-shield-check text-emerald-600"></i> Verified Mandi Stockist
+                </span>
+              </div>
+
+              <!-- Trust Badge: Direct Mill Rate & Market Standing -->
+              <div class="bg-gradient-to-r from-navy-900 to-navy-800 text-white rounded-xl p-2.5 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-award text-gold-400 text-base"></i>
+                  <div>
+                    <div class="font-extrabold text-gold-400 text-[11px] uppercase tracking-wider">Direct Mill Rate Guaranteed</div>
+                    <div class="text-[10px] text-slate-300">${ws.marketStandingYears}+ Years Market Standing in ${ws.area}</div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Trust Badge: Direct Mill Rate & Mandi Standing -->
-              <div class="bg-navy-50 border border-navy-200 rounded-xl p-2.5 flex items-center gap-2 text-xs">
-                <i class="fa-solid fa-award text-gold-600 text-base"></i>
-                <div>
-                  <span class="font-extrabold text-navy-900">Direct Mill Rate • ${ws.marketStandingYears}+ Years Mandi Standing</span>
-                  <p class="text-[11px] text-slate-600">Zero broker cuts. Direct truckload & carton supply.</p>
+                <div class="text-right text-[10px] text-slate-300">
+                  <div class="font-bold text-white">${ws.dealsCompleted}+ Deals</div>
+                  <div>Same Day Dispatch</div>
                 </div>
               </div>
 
-              <!-- Metrics Row: MOV, SLA, Deals -->
-              <div class="grid grid-cols-3 gap-2 py-1 text-center text-xs bg-slate-50 rounded-xl p-2 border border-slate-100">
-                <div>
-                  <div class="text-[10px] text-slate-500 font-medium">Min Order</div>
-                  <div class="font-bold text-navy-900">${ws.minOrderValue}</div>
-                </div>
-                <div>
-                  <div class="text-[10px] text-slate-500 font-medium">Dispatch Time</div>
-                  <div class="font-bold text-emerald-700">${ws.deliveryTime}</div>
-                </div>
-                <div>
-                  <div class="text-[10px] text-slate-500 font-medium">Deals Done</div>
-                  <div class="font-bold text-slate-800">${ws.dealsCompleted}+</div>
-                </div>
-              </div>
-
-              <!-- Brands Dealt In Chips -->
-              <div class="space-y-1">
-                <div class="text-[11px] font-bold text-slate-500">BRANDS DEALT IN:</div>
+              <!-- Major Brands Dealt In -->
+              <div class="pt-1">
+                <div class="text-[11px] font-bold text-slate-500 mb-1.5 uppercase">Brands / SKUs Available:</div>
                 <div class="flex flex-wrap gap-1.5">
-                  ${ws.brandsDealtIn.map(b => `
-                    <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold">
-                      ${b}
+                  ${ws.brandsDealtIn.map(brand => `
+                    <span class="px-2 py-0.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                      ${brand}
                     </span>
                   `).join('')}
                 </div>
               </div>
+
+              <!-- Commercial Specs: MOV & Delivery -->
+              <div class="grid grid-cols-2 gap-2 pt-2 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <div>
+                  <span class="text-slate-500 text-[11px]">Min. Order (MOV):</span>
+                  <div class="font-extrabold text-navy-900">${ws.minOrderValue}</div>
+                </div>
+                <div>
+                  <span class="text-slate-500 text-[11px]">Dispatch Speed:</span>
+                  <div class="font-extrabold text-emerald-600">${ws.deliveryTime}</div>
+                </div>
+              </div>
             </div>
 
-            <!-- Card Actions -->
+            <!-- Action Buttons Section -->
             <div class="space-y-2 pt-2 border-t border-slate-100">
               
               <!-- Direct WhatsApp RFQ Button (Primary Instant Action) -->
               <button 
                 onclick="openRfqModal('${ws.id}')"
-                class="w-full py-2.5 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition"
+                class="w-full py-2.5 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition"
               >
                 <i class="fa-brands fa-whatsapp text-base"></i>
-                Direct WhatsApp RFQ (Get Rate Card)
+                Direct WhatsApp RFQ (Request Quote)
               </button>
 
-              <!-- Locked vs Unlocked Contact UI -->
-              ${isUnlocked ? `
-                <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-3 space-y-2">
-                  <div class="flex items-center justify-between text-xs">
-                    <span class="font-bold text-emerald-800"><i class="fa-solid fa-lock-open text-emerald-600 mr-1"></i> Contact Details Unlocked</span>
-                    <span class="text-[10px] font-bold text-slate-500">GST: ${ws.gstin}</span>
-                  </div>
-                  <div class="text-xs font-bold text-slate-900">${ws.phone} (${ws.contactPerson})</div>
-                  <div class="text-[11px] text-slate-600">${ws.address}</div>
-                  
-                  <div class="flex gap-2 pt-1">
-                    <a href="tel:${ws.phone}" class="flex-1 py-1.5 rounded-lg bg-navy-900 text-white font-bold text-xs text-center">
-                      <i class="fa-solid fa-phone mr-1"></i> Call
-                    </a>
-                    <button onclick="openDetailModal('${ws.id}')" class="flex-1 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-bold text-xs">
-                      View Profile
-                    </button>
-                  </div>
-                </div>
+              <!-- Unlock Contact Button vs Unlocked Direct Contacts -->
+              ${!isUnlocked ? `
+                <button 
+                  onclick="openUnlockModal('${ws.id}')"
+                  class="w-full py-2.5 rounded-xl ${state.freeUnlocksRemaining > 0 ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-navy-900 hover:bg-navy-800 text-white'} font-bold text-xs flex items-center justify-center gap-2 transition shadow"
+                >
+                  <i class="fa-solid fa-lock-open"></i>
+                  ${state.freeUnlocksRemaining > 0 
+                    ? `⚡ Free Trial Unlock Contact (₹0 Fee • ${state.freeUnlocksRemaining} Left)` 
+                    : 'Connect / Get Direct Phone (₹49 One-Time)'}
+                </button>
               ` : `
-                <div class="space-y-2">
-                  <button 
-                    onclick="openUnlockModal('${ws.id}')"
-                    class="w-full py-2.5 rounded-xl ${freeUnlocksAvailable ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-navy-900 hover:bg-navy-800'} text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow transition"
-                  >
-                    <i class="fa-solid fa-lock-open"></i>
-                    <span>${freeUnlocksAvailable ? '⚡ Free Trial Unlock Contact (₹0 Fee)' : 'Unlock Phone & Warehouse (₹49)'}</span>
-                  </button>
-                  <div class="flex items-center justify-between text-[11px] text-slate-500 px-1">
-                    <span>Phone & exact warehouse locked</span>
-                    <button onclick="openDetailModal('${ws.id}')" class="text-navy-600 font-bold hover:underline">Full Details &gt;</button>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-phone text-emerald-600"></i>
+                    <span class="font-extrabold text-navy-900">${ws.phone}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <a href="tel:${ws.phone}" class="px-2.5 py-1 rounded-lg bg-navy-900 text-white font-bold text-[11px]">Call</a>
+                    <button onclick="openDetailModal('${ws.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">Details</button>
                   </div>
                 </div>
               `}
 
+              <!-- View Full Profile Button -->
+              <button 
+                onclick="openDetailModal('${ws.id}')"
+                class="w-full py-1.5 text-slate-500 hover:text-navy-900 text-xs font-bold text-center"
+              >
+                View Full Wholesaler Profile & Mandi Standing →
+              </button>
             </div>
 
           </div>
@@ -1261,328 +1303,381 @@
       }).join('');
     }
 
-    // --- Render Unlocked Suppliers Directory ---
-    function renderUnlockedDirectory() {
+    // --- Unlocked Suppliers Directory Rendering ---
+    function renderUnlockedList() {
       const container = document.getElementById('unlockedListContainer');
-      const unlockedList = wholesalers.filter(ws => unlockedWholesalerIds.has(ws.id));
-      document.getElementById('unlockedBadgeCount').innerText = unlockedList.length;
+      const badge = document.getElementById('unlockedBadgeCount');
+      const unlockedList = state.wholesalers.filter(ws => state.unlockedIds.includes(ws.id));
+      
+      badge.innerText = unlockedList.length;
 
       if (unlockedList.length === 0) {
         container.innerHTML = `
-          <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
-            <i class="fa-solid fa-address-book text-4xl text-slate-300"></i>
-            <h4 class="font-extrabold text-navy-900">No Unlocked Wholesalers Yet</h4>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto">Use your 3 Free Trial Unlocks to reveal verified direct suppliers in Sadar Bazar, APMC Vashi and Surat.</p>
-            <button onclick="switchTab('explore')" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold">Explore Suppliers</button>
+          <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
+              <i class="fa-solid fa-address-book"></i>
+            </div>
+            <h4 class="font-extrabold text-navy-900 text-base">No Unlocked Wholesalers Yet</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Use your 3 free trial unlocks on the explore tab to save verified direct supplier contacts here.</p>
+            <button onclick="switchTab('explore')" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold shadow">
+              Explore Wholesalers
+            </button>
           </div>
         `;
         return;
       }
 
       container.innerHTML = unlockedList.map(ws => `
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3 shadow-sm">
           <div class="flex items-start justify-between">
             <div>
-              <h4 class="font-extrabold text-navy-900 text-base">${ws.businessName}</h4>
-              <p class="text-xs text-slate-500">Contact: <strong>${ws.contactPerson}</strong> • ${ws.area}, ${ws.city}</p>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase">Direct Access Unlocked</span>
+              <h4 class="font-extrabold text-navy-900 text-base mt-1">${ws.businessName}</h4>
+              <p class="text-xs text-slate-500">${ws.contactPerson} (Authorized Stockist)</p>
             </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">UNLOCKED</span>
+            <div class="w-10 h-10 rounded-xl bg-navy-50 text-navy-700 flex items-center justify-center font-bold text-lg">
+              <i class="fa-solid fa-store"></i>
+            </div>
           </div>
 
-          <div class="bg-slate-50 rounded-xl p-3 text-xs space-y-1 border border-slate-200">
-            <div class="font-bold text-slate-900 flex items-center gap-1.5">
-              <i class="fa-solid fa-phone text-navy-700"></i> Phone: ${ws.phone}
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs space-y-1.5">
+            <div class="flex items-center gap-2 text-slate-700">
+              <i class="fa-solid fa-phone text-emerald-600"></i>
+              <span class="font-bold">${ws.phone}</span>
             </div>
-            <div class="text-slate-600 flex items-start gap-1.5">
-              <i class="fa-solid fa-location-dot text-rose-500 mt-0.5"></i> ${ws.address}
+            <div class="flex items-center gap-2 text-slate-700">
+              <i class="fa-solid fa-location-dot text-red-500"></i>
+              <span>${ws.address}</span>
             </div>
-            <div class="text-slate-500 text-[11px]">GSTIN: ${ws.gstin}</div>
+            <div class="flex items-center gap-2 text-slate-700">
+              <i class="fa-solid fa-shield-check text-blue-500"></i>
+              <span>GSTIN: <strong>${ws.gstin}</strong></span>
+            </div>
           </div>
 
-          <div class="flex gap-2">
-            <a href="tel:${ws.phone}" class="flex-1 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold text-center">
-              <i class="fa-solid fa-phone mr-1"></i> Call Supplier
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="tel:${ws.phone}" class="py-2.5 rounded-xl bg-navy-900 text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-navy-800 transition">
+              <i class="fa-solid fa-phone"></i> Call Direct
             </a>
-            <button onclick="openRfqModal('${ws.id}')" class="flex-1 py-2 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white text-xs font-bold">
-              <i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp RFQ
+            <button onclick="openRfqModal('${ws.id}')" class="py-2.5 rounded-xl bg-whatsapp text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-whatsapp-hover transition">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp RFQ
             </button>
           </div>
         </div>
       `).join('');
     }
 
-    // --- Render Wholesaler Dashboard Inquiries ---
+    // --- Wholesaler Inquiries Stream Rendering ---
     function renderWholesalerInquiries() {
       const container = document.getElementById('wholesalerInquiriesContainer');
-      container.innerHTML = wholesalerInquiries.map(inq => `
-        <div class="p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      container.innerHTML = SAMPLE_INQUIRIES.map(inq => `
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-extrabold text-navy-900 text-sm">${inq.retailerName}</span>
-              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${inq.status === 'Unanswered' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${inq.status}</span>
-              <span class="text-slate-400 text-[11px]">${inq.time}</span>
+              <span class="font-bold text-navy-900">${inq.retailerName}</span>
+              <span class="text-[10px] text-slate-400">• ${inq.timestamp}</span>
             </div>
-            <p class="text-slate-700 font-medium">${inq.requirement} (${inq.quantity})</p>
-            <div class="text-slate-500 text-[11px]">Phone: ${inq.phone}</div>
+            <p class="text-slate-600 font-medium">${inq.items}</p>
           </div>
           <div class="flex items-center gap-2">
-            <a href="https://api.whatsapp.com/send?phone=${inq.phone.replace(/[^0-9]/g, '')}&text=Namaste!%20Replying%20to%20your%20RFQ%20on%20SaudagarConnection." target="_blank" class="px-3 py-2 rounded-lg bg-whatsapp text-white font-bold flex items-center gap-1">
-              <i class="fa-brands fa-whatsapp"></i> Reply on WhatsApp
-            </a>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 whitespace-nowrap">${inq.status}</span>
+            <button onclick="showToast('Connecting directly via WhatsApp...', 'fa-whatsapp')" class="px-3 py-1.5 rounded-lg bg-whatsapp hover:bg-whatsapp-hover text-white font-bold whitespace-nowrap flex items-center gap-1.5">
+              <i class="fa-brands fa-whatsapp"></i> Reply
+            </button>
           </div>
         </div>
       `).join('');
     }
 
-    // --- Update Unlocks Remaining UI ---
-    function updateUnlockUI() {
-      document.getElementById('navUnlocksLeft').innerText = `${freeUnlocksRemaining} Free Unlocks Left`;
-      document.getElementById('trialQuotaText').innerText = `${freeUnlocksRemaining} of 3 Available`;
-      const pct = (freeUnlocksRemaining / 3) * 100;
-      document.getElementById('trialProgressBar').style.width = `${pct}%`;
-      
-      const modalTrialOpt = document.getElementById('unlockTrialOption');
-      const modalFreeCount = document.getElementById('modalFreeCount');
-      if (modalFreeCount) modalFreeCount.innerText = freeUnlocksRemaining;
-      if (modalTrialOpt) {
-        if (freeUnlocksRemaining <= 0) {
-          modalTrialOpt.classList.add('hidden');
-        } else {
-          modalTrialOpt.classList.remove('hidden');
-        }
+    // --- Free Trial Banner Progress Update ---
+    function updateTrialBannerUI() {
+      const quotaText = document.getElementById('trialQuotaText');
+      const progressBar = document.getElementById('trialProgressBar');
+      const navUnlocks = document.getElementById('navUnlocksLeft');
+      const modalCount = document.getElementById('modalFreeCount');
+
+      const count = state.freeUnlocksRemaining;
+      quotaText.innerText = `${count} of 3 Available`;
+      progressBar.style.width = `${(count / 3) * 100}%`;
+      navUnlocks.innerText = `${count} Free Unlocks Left`;
+      modalCount.innerText = count;
+
+      const trialOption = document.getElementById('unlockTrialOption');
+      if (count <= 0) {
+        trialOption.classList.add('hidden');
+      } else {
+        trialOption.classList.remove('hidden');
       }
     }
 
-    // --- Modal Triggers ---
-    function openVoiceSearchModal() {
-      document.getElementById('voiceStatusText').innerText = 'Listening... Speak in Hindi or English';
-      document.getElementById('voiceModal').classList.remove('hidden');
-    }
-
-    function applyVoiceSearchQuery(query) {
-      searchQuery = query.toLowerCase();
-      document.getElementById('searchInput').value = query;
-      closeModal('voiceModal');
-      renderWholesalers();
-      showToast(`Voice Search: "${query}"`);
-    }
-
-    function openRfqModal(wsId) {
-      targetWholesaler = wholesalers.find(w => w.id === wsId);
-      if (!targetWholesaler) return;
-
-      document.getElementById('rfqWholesalerName').innerText = `To: ${targetWholesaler.businessName} (${targetWholesaler.area})`;
-      document.getElementById('rfqRequirementInput').value = `Wholesale bulk requirement for ${targetWholesaler.brandsDealtIn.slice(0, 3).join(', ')} products. Please share Direct Mill Rate card.`;
-      document.getElementById('rfqModal').classList.remove('hidden');
-    }
-
-    function sendDirectWhatsAppRfq() {
-      if (!targetWholesaler) return;
-      const req = document.getElementById('rfqRequirementInput').value;
-      const qty = document.getElementById('rfqQuantityInput').value;
-      const store = document.getElementById('rfqStoreNameInput').value;
-      const pin = document.getElementById('rfqPincodeInput').value;
-
-      const formattedMsg = `Namaste ${targetWholesaler.businessName}!\n\nI am contacting you from ${store} (${pin}). We found your verified profile on SaudagarConnection.\n\n*Direct RFQ Requirement*:\n• Items: ${req}\n• Quantity: ${qty}\n\nPlease send your best Direct Mill / Wholesale Rate card and dispatch delivery timeline.\nDhanyawad!`;
-      
-      const cleanPhone = targetWholesaler.phone.replace(/[^0-9]/g, '');
-      const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(formattedMsg)}`;
-
-      // Record in local inquiries
-      wholesalerInquiries.unshift({
-        id: 'inq-' + Date.now(),
-        retailerName: store,
-        phone: '+91 98765 43210',
-        requirement: req,
-        quantity: qty,
-        time: 'Just now',
-        status: 'Sent via WhatsApp'
-      });
-      renderWholesalerInquiries();
-
-      closeModal('rfqModal');
-      window.open(waUrl, '_blank');
-      showToast("Opening WhatsApp with structured RFQ...");
-    }
-
-    function openUnlockModal(wsId) {
-      targetWholesaler = wholesalers.find(w => w.id === wsId);
-      if (!targetWholesaler) return;
-
-      document.getElementById('unlockWholesalerTitle').innerText = `${targetWholesaler.businessName} (${targetWholesaler.area})`;
-      updateUnlockUI();
-      document.getElementById('unlockModal').classList.remove('hidden');
-    }
-
-    function executeTrialUnlock() {
-      if (!targetWholesaler) return;
-      if (freeUnlocksRemaining > 0) {
-        freeUnlocksRemaining--;
-      }
-      unlockedWholesalerIds.add(targetWholesaler.id);
-      updateUnlockUI();
-      closeModal('unlockModal');
-      renderWholesalers();
-      renderUnlockedDirectory();
-      showToast(`🎉 Free Trial Unlock Applied! (${freeUnlocksRemaining} free unlocks remaining)`);
-    }
-
-    function executePaidUnlock(method) {
-      if (!targetWholesaler) return;
-      unlockedWholesalerIds.add(targetWholesaler.id);
-      closeModal('unlockModal');
-      renderWholesalers();
-      renderUnlockedDirectory();
-      showToast(`₹49 Payment Successful via ${method}! Contact Unlocked.`);
-    }
-
-    function openDetailModal(wsId) {
-      const ws = wholesalers.find(w => w.id === wsId);
-      if (!ws) return;
-
-      const isUnlocked = unlockedWholesalerIds.has(ws.id);
-      const content = document.getElementById('detailModalContent');
-
-      content.innerHTML = `
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-navy-900 text-gold-400 flex items-center justify-center font-bold text-lg">
-              <i class="fa-solid fa-warehouse"></i>
-            </div>
-            <div>
-              <h3 class="font-extrabold text-navy-900 text-base">${ws.businessName}</h3>
-              <p class="text-xs text-slate-500">${ws.area}, ${ws.city}</p>
-            </div>
-          </div>
-          <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-slate-600 p-1">
-            <i class="fa-solid fa-xmark text-lg"></i>
-          </button>
-        </div>
-
-        <div class="space-y-4 text-xs">
-          
-          <div class="bg-navy-50 border border-navy-200 rounded-xl p-3">
-            <div class="font-extrabold text-navy-900 text-sm">Direct Mill Rate & Mandi Standing Guarantee</div>
-            <p class="text-slate-700 mt-1">${ws.marketStandingYears}+ Years in ${ws.area}. Verified 100% genuine factory wholesale rates with no middleman margins.</p>
-          </div>
-
-          <div>
-            <h5 class="font-bold text-slate-900 mb-1">About This Wholesaler:</h5>
-            <p class="text-slate-600 leading-relaxed">${ws.description}</p>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div>
-              <div class="text-slate-500 font-medium">Min Order</div>
-              <div class="font-bold text-navy-900 text-sm">${ws.minOrderValue}</div>
-            </div>
-            <div>
-              <div class="text-slate-500 font-medium">Dispatch SLA</div>
-              <div class="font-bold text-emerald-700 text-sm">${ws.deliveryTime}</div>
-            </div>
-            <div>
-              <div class="text-slate-500 font-medium">Response SLA</div>
-              <div class="font-bold text-navy-900 text-sm">${ws.responseTime}</div>
-            </div>
-            <div>
-              <div class="text-slate-500 font-medium">Verified Deals</div>
-              <div class="font-bold text-slate-900 text-sm">${ws.dealsCompleted}+</div>
-            </div>
-          </div>
-
-          <div>
-            <h5 class="font-bold text-slate-900 mb-1.5">Authorized Brands & Product Lines:</h5>
-            <div class="flex flex-wrap gap-1.5">
-              ${ws.brandsDealtIn.map(b => `<span class="px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-slate-800 border border-slate-200">${b}</span>`).join('')}
-            </div>
-          </div>
-
-          <!-- Contact Reveal Box -->
-          <div class="p-3.5 rounded-xl border ${isUnlocked ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-100 border-slate-200'} space-y-2">
-            <div class="font-bold ${isUnlocked ? 'text-emerald-900' : 'text-slate-700'}">
-              ${isUnlocked ? 'Direct Contact Revealed:' : 'Contact & Warehouse Details (Locked)'}
-            </div>
-            ${isUnlocked ? `
-              <div class="text-sm font-extrabold text-slate-900">${ws.phone} (${ws.contactPerson})</div>
-              <div class="text-slate-700">${ws.address}</div>
-              <div class="text-slate-500">GSTIN: ${ws.gstin}</div>
-            ` : `
-              <p class="text-slate-500">Unlock to view exact shop number, mobile, and warehouse gate pass.</p>
-            `}
-          </div>
-
-        </div>
-
-        <div class="pt-2 flex gap-3">
-          <button onclick="closeModal('detailModal'); openRfqModal('${ws.id}')" class="flex-1 py-3 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2">
-            <i class="fa-brands fa-whatsapp"></i> Send Direct WhatsApp RFQ
-          </button>
-          ${!isUnlocked ? `
-            <button onclick="closeModal('detailModal'); openUnlockModal('${ws.id}')" class="flex-1 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs sm:text-sm">
-              Unlock Contact
-            </button>
-          ` : ''}
-        </div>
-      `;
-
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    function openWholesalerRegistrationModal() {
-      document.getElementById('onboardModal').classList.remove('hidden');
-    }
-
-    function handleWholesalerRegister(e) {
-      e.preventDefault();
-      const name = document.getElementById('regFirmName').value;
-      const area = document.getElementById('regArea').value;
-      const phone = document.getElementById('regPhone').value;
-      const cat = document.getElementById('regCategory').value;
-      const years = parseInt(document.getElementById('regYears').value) || 10;
-      const brands = document.getElementById('regBrands').value.split(',').map(s => s.trim());
-      const gstin = document.getElementById('regGstin').value || '07AABCM9999P1Z2';
-
-      const newWs = {
-        id: 'ws-' + Date.now(),
-        businessName: name,
-        contactPerson: 'Authorized Proprietor',
-        phone: phone,
-        email: 'sales@' + name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.in',
-        address: `Shop 12, Main Mandi Road, ${area}`,
-        city: area.includes('Delhi') ? 'Delhi NCR' : 'Trade Hub',
-        area: area,
-        categories: [cat],
-        brandsDealtIn: brands,
-        gstin: gstin,
-        rating: 5.0,
-        reviewsCount: 1,
-        dealsCompleted: 10,
-        minOrderValue: '₹10,000',
-        deliveryTime: 'Same Day Dispatch',
-        responseTime: 'Within 5 mins',
-        isVerified: true,
-        isJdVerified: true,
-        hasDirectMillRate: true,
-        marketStandingYears: years,
-        marketStandingNote: `${years}+ Years Direct Mandi Standing`,
-        description: `Verified master distributor in ${area} specializing in ${brands.join(', ')} with Direct Mill Rate supply guarantee.`
-      };
-
-      wholesalers.unshift(newWs);
-      closeModal('onboardModal');
-      setRole('RETAILER');
-      renderWholesalers();
-      showToast(`🎉 "${name}" is now LIVE on SaudagarConnection!`);
+    // --- Modal Management ---
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.remove('hidden');
     }
 
     function closeModal(modalId) {
       document.getElementById(modalId).classList.add('hidden');
     }
 
-    function showToast(msg) {
+    // --- Voice Search Modal Logic ---
+    function openVoiceSearchModal() {
+      openModal('voiceModal');
+    }
+
+    function renderVoicePresets() {
+      const container = document.getElementById('voicePresetsContainer');
+      container.innerHTML = VOICE_PROMPTS.map(p => `
+        <button 
+          onclick="applyVoiceSearch('${p.text}', '${p.category}', '${p.area}')"
+          class="w-full text-left p-2.5 rounded-xl border border-slate-200 hover:border-navy-500 hover:bg-navy-50 text-xs font-semibold text-slate-700 flex items-center justify-between group transition"
+        >
+          <span>"${p.text}"</span>
+          <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-navy-600 text-[10px]"></i>
+        </button>
+      `).join('');
+    }
+
+    function applyVoiceSearch(text, category, area) {
+      state.searchQuery = '';
+      state.selectedCategory = category;
+      state.selectedArea = area;
+      document.getElementById('searchInput').value = text;
+      document.getElementById('selectArea').value = area;
+      renderCategoryChips();
+      renderWholesalers();
+      closeModal('voiceModal');
+      showToast(`Voice Search Applied: "${text}"`, 'fa-microphone');
+    }
+
+    // --- Direct WhatsApp RFQ Modal Logic ---
+    function openRfqModal(wholesalerId) {
+      const ws = state.wholesalers.find(w => w.id === wholesalerId);
+      if (!ws) return;
+
+      state.selectedWholesalerForAction = ws;
+      document.getElementById('rfqWholesalerName').innerText = `To: ${ws.businessName} (${ws.area})`;
+      document.getElementById('rfqRequirementInput').value = `${ws.brandsDealtIn.slice(0, 3).join(', ')} - Wholesale Rate Sheet & Carton Rates`;
+      openModal('rfqModal');
+    }
+
+    function sendDirectWhatsAppRfq() {
+      const ws = state.selectedWholesalerForAction;
+      if (!ws) return;
+
+      const requirement = document.getElementById('rfqRequirementInput').value;
+      const quantity = document.getElementById('rfqQuantityInput').value;
+      const pincode = document.getElementById('rfqPincodeInput').value;
+      const storeName = document.getElementById('rfqStoreNameInput').value;
+
+      const cleanPhone = ws.phone.replace(/[^0-9]/g, '');
+      const rawText = `*B2B Trade RFQ (SaudagarConnection)*\n\nHello ${ws.contactPerson} (${ws.businessName}),\nI am contacting you from *${storeName}*.\n\n*Requirement:* ${requirement}\n*Estimated Order:* ${quantity}\n*Delivery Location:* ${pincode}\n\nPlease share your lowest direct mill/wholesale rate sheet and dispatch time. Thank you!`;
+      
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(rawText)}`;
+      
+      closeModal('rfqModal');
+      showToast(`Launching WhatsApp for ${ws.businessName}...`, 'fa-whatsapp');
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // --- Unlock & Payment Logic ---
+    function openUnlockModal(wholesalerId) {
+      const ws = state.wholesalers.find(w => w.id === wholesalerId);
+      if (!ws) return;
+
+      state.selectedWholesalerForAction = ws;
+      document.getElementById('unlockWholesalerTitle').innerText = `${ws.businessName} (${ws.area})`;
+      openModal('unlockModal');
+    }
+
+    function executeTrialUnlock() {
+      const ws = state.selectedWholesalerForAction;
+      if (!ws) return;
+
+      if (state.freeUnlocksRemaining > 0) {
+        state.freeUnlocksRemaining--;
+        if (!state.unlockedIds.includes(ws.id)) {
+          state.unlockedIds.push(ws.id);
+        }
+        updateTrialBannerUI();
+        renderWholesalers();
+        renderUnlockedList();
+        closeModal('unlockModal');
+        showToast(`🎉 1 Free Trial Unlock Applied! ${ws.businessName} is now unlocked.`, 'fa-check');
+      }
+    }
+
+    function executePaidUnlock(method) {
+      const ws = state.selectedWholesalerForAction;
+      if (!ws) return;
+
+      if (!state.unlockedIds.includes(ws.id)) {
+        state.unlockedIds.push(ws.id);
+      }
+      renderWholesalers();
+      renderUnlockedList();
+      closeModal('unlockModal');
+      showToast(`Payment of ₹49 via ${method} Successful! Contact unlocked.`, 'fa-shield-check');
+    }
+
+    // --- Full Profile Modal Logic ---
+    function openDetailModal(wholesalerId) {
+      const ws = state.wholesalers.find(w => w.id === wholesalerId);
+      if (!ws) return;
+
+      const isUnlocked = state.unlockedIds.includes(ws.id);
+      const container = document.getElementById('detailModalContent');
+
+      container.innerHTML = `
+        <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                <i class="fa-solid fa-shield-check"></i> 100% GST & Mill Verified
+              </span>
+              <span class="text-xs text-gold-600 font-bold"><i class="fa-solid fa-star text-gold-500"></i> ${ws.rating} (${ws.reviewsCount} verified reviews)</span>
+            </div>
+            <h3 class="font-extrabold text-navy-900 text-lg sm:text-xl mt-1">${ws.businessName}</h3>
+            <p class="text-xs text-slate-500">${ws.contactPerson} • ${ws.area}, ${ws.city}</p>
+          </div>
+          <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-slate-600 p-1">
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+
+        <div class="bg-gradient-to-r from-navy-900 to-navy-800 text-white rounded-2xl p-4 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gold-400 text-navy-950 flex items-center justify-center font-extrabold text-lg">
+              <i class="fa-solid fa-certificate"></i>
+            </div>
+            <div>
+              <div class="font-extrabold text-gold-400 text-sm">Direct Mill Rate & Mandi Standing</div>
+              <div class="text-slate-300">${ws.marketStandingYears}+ Years Authorized Trade Operations in ${ws.area}</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="font-bold text-white">${ws.dealsCompleted}+ Bulk Dispatches</div>
+            <div class="text-emerald-400 font-semibold">${ws.responseTime}</div>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <h5 class="font-bold text-slate-700 uppercase mb-1">About the Wholesaler / Mill Stockist:</h5>
+            <p class="text-slate-600 leading-relaxed">${ws.description}</p>
+          </div>
+
+          <div>
+            <h5 class="font-bold text-slate-700 uppercase mb-1.5">Authorized Brands / Categories Supplied:</h5>
+            <div class="flex flex-wrap gap-1.5">
+              ${ws.brandsDealtIn.map(b => `<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 font-bold border border-slate-200">${b}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <div>
+              <span class="text-slate-500">Minimum Order Value:</span>
+              <div class="font-extrabold text-navy-900 text-sm">${ws.minOrderValue}</div>
+            </div>
+            <div>
+              <span class="text-slate-500">Delivery / Transport:</span>
+              <div class="font-extrabold text-emerald-600 text-sm">${ws.deliveryTime}</div>
+            </div>
+          </div>
+
+          <!-- Contact Details (Locked vs Unlocked) -->
+          <div class="border border-slate-200 rounded-2xl p-4 space-y-2 ${isUnlocked ? 'bg-emerald-50/50' : 'bg-slate-50'}">
+            <div class="flex items-center justify-between">
+              <h5 class="font-bold text-navy-900">Direct Warehouse Contact Info</h5>
+              ${isUnlocked ? '<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">UNLOCKED</span>' : '<span class="text-[10px] font-bold text-slate-500">LOCKED</span>'}
+            </div>
+
+            ${isUnlocked ? `
+              <div class="space-y-1 text-slate-700">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-phone text-emerald-600"></i> <strong class="text-navy-900">${ws.phone}</strong></div>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-red-500"></i> <span>${ws.address}</span></div>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-shield-check text-blue-600"></i> <span>GSTIN: <strong>${ws.gstin}</strong></span></div>
+              </div>
+            ` : `
+              <p class="text-slate-500 text-xs">Direct phone numbers and exact shop address are protected to ensure authentic buyer inquiries.</p>
+            `}
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+          <button onclick="closeModal('detailModal'); openRfqModal('${ws.id}')" class="w-full sm:flex-1 py-3 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow">
+            <i class="fa-brands fa-whatsapp text-lg"></i> Direct WhatsApp RFQ
+          </button>
+          ${!isUnlocked ? `
+            <button onclick="closeModal('detailModal'); openUnlockModal('${ws.id}')" class="w-full sm:flex-1 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow">
+              <i class="fa-solid fa-lock-open"></i> Unlock Direct Contact
+            </button>
+          ` : `
+            <a href="tel:${ws.phone}" class="w-full sm:flex-1 py-3 rounded-xl bg-navy-900 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow text-center">
+              <i class="fa-solid fa-phone"></i> Call Wholesaler Now
+            </a>
+          `}
+        </div>
+      `;
+
+      openModal('detailModal');
+    }
+
+    // --- Wholesaler Registration Modal Logic ---
+    function openWholesalerRegistrationModal() {
+      openModal('onboardModal');
+    }
+
+    function handleWholesalerRegister(event) {
+      event.preventDefault();
+      const firmName = document.getElementById('regFirmName').value;
+      const area = document.getElementById('regArea').value;
+      const phone = document.getElementById('regPhone').value;
+      const category = document.getElementById('regCategory').value;
+      const years = parseInt(document.getElementById('regYears').value) || 10;
+      const brands = document.getElementById('regBrands').value.split(',').map(b => b.trim()).filter(Boolean);
+      const gstin = document.getElementById('regGstin').value || '07AAAAA1234Z1Z1';
+
+      const newWholesaler = {
+        id: `ws-${Date.now()}`,
+        businessName: firmName,
+        contactPerson: 'Authorized Partner',
+        phone: phone,
+        email: 'sales@directwholesale.in',
+        address: `${area} Main Market Hub`,
+        city: 'Delhi NCR',
+        area: area,
+        categories: [category],
+        brandsDealtIn: brands.length > 0 ? brands : ['Tata', 'MDH', 'Catch'],
+        gstin: gstin,
+        rating: 4.9,
+        reviewsCount: 12,
+        dealsCompleted: 150,
+        minOrderValue: '₹10,000',
+        deliveryTime: 'Same Day Dispatch',
+        responseTime: 'Within 10 mins',
+        isVerified: true,
+        isJdVerified: true,
+        hasDirectMillRate: true,
+        marketStandingYears: years,
+        marketStandingNote: `${years}+ Years Direct Mandi Standing`,
+        description: `Verified supplier for ${category} based out of ${area}. Direct mill stockist.`
+      };
+
+      state.wholesalers.unshift(newWholesaler);
+      renderWholesalers();
+      closeModal('onboardModal');
+      showToast(`🎉 ${firmName} profile activated with Zero Catalogue Setup!`, 'fa-check');
+    }
+
+    // --- Toast Notification Helper ---
+    function showToast(message, iconClass = 'fa-bell') {
       const toast = document.getElementById('toast');
-      const msgEl = document.getElementById('toastMessage');
-      msgEl.innerText = msg;
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.innerText = message;
+      toastIcon.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+
       toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
