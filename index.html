@@ -78,67 +78,12 @@
       scrollbar-width: none;
     }
     .modal-backdrop {
-      background-color: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(6px);
+      background-color: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
     }
   </style>
 </head>
 <body class="h-full font-sans text-slate-800 antialiased flex flex-col bg-slate-50">
-
-  <!-- ================= MANDATORY LOGIN & ROLE SELECTION MODAL (AUTH GATEWAY) ================= -->
-  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 transform transition-all">
-      
-      <!-- Logo Header -->
-      <div class="text-center space-y-2">
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20 text-navy-950 font-extrabold text-2xl mx-auto">
-          <i class="fa-solid fa-handshake"></i>
-        </div>
-        <h2 class="text-2xl font-extrabold text-navy-900 tracking-tight">Welcome to Saudagar<span class="text-gold-600">Connection</span></h2>
-        <p class="text-xs text-slate-500">India's First Direct B2B Wholesale & Retail Matchmaking Directory</p>
-      </div>
-
-      <!-- Role Selection Tabs -->
-      <div class="space-y-3">
-        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Select Your Business Role:</label>
-        <div class="grid grid-cols-2 gap-3">
-          <button type="button" id="authRoleRetailerBtn" onclick="selectAuthRole('RETAILER')" class="p-3.5 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-2 transition shadow-sm">
-            <i class="fa-solid fa-store text-lg text-navy-900"></i>
-            <span>I am a Retailer / Shop Owner</span>
-          </button>
-          <button type="button" id="authRoleWholesalerBtn" onclick="selectAuthRole('WHOLESALER')" class="p-3.5 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-2 transition hover:border-slate-300">
-            <i class="fa-solid fa-warehouse text-lg text-slate-400"></i>
-            <span>I am a Wholesaler / Stockist</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Mobile Number / Login Form -->
-      <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">WhatsApp / Mobile Number:</label>
-          <div class="relative flex items-center">
-            <span class="absolute left-3 text-slate-400 font-bold">+91</span>
-            <input type="tel" id="authPhoneInput" required placeholder="98110 XXXXX" maxlength="10" class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-sm font-bold focus:ring-2 focus:ring-navy-600 focus:outline-none">
-          </div>
-          <p class="text-[11px] text-slate-400 mt-1">Instant OTP verification & secure B2B networking.</p>
-        </div>
-
-        <button type="submit" class="w-full py-3.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-sm shadow-lg shadow-navy-900/20 transition flex items-center justify-center gap-2">
-          <span>Continue to App</span>
-          <i class="fa-solid fa-arrow-right text-xs text-gold-400"></i>
-        </button>
-      </form>
-
-      <!-- Trust footer in auth -->
-      <div class="pt-2 border-t border-slate-100 flex items-center justify-center gap-4 text-[11px] text-slate-400 font-semibold">
-        <span><i class="fa-solid fa-shield-check text-emerald-500 mr-1"></i> GST Verified</span>
-        <span>•</span>
-        <span><i class="fa-solid fa-lock text-gold-500 mr-1"></i> 100% Secure</span>
-      </div>
-
-    </div>
-  </div>
 
   <!-- ================= TOP HEADER & NAVIGATION ================= -->
   <header class="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
@@ -982,8 +927,7 @@
       selectedArea: '',
       selectedSort: 'standing',
       verifiedOnly: false,
-      selectedWholesalerForAction: null,
-      authRole: 'RETAILER'
+      selectedWholesalerForAction: null
     };
 
     // --- Initialization ---
@@ -995,37 +939,6 @@
       renderVoicePresets();
       updateTrialBannerUI();
     });
-
-    // --- Auth Gateway Logic ---
-    function selectAuthRole(role) {
-      state.authRole = role;
-      const retailBtn = document.getElementById('authRoleRetailerBtn');
-      const wholeBtn = document.getElementById('authRoleWholesalerBtn');
-
-      if (role === 'RETAILER') {
-        retailBtn.className = 'p-3.5 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-2 transition shadow-sm';
-        wholeBtn.className = 'p-3.5 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-2 transition hover:border-slate-300';
-      } else {
-        wholeBtn.className = 'p-3.5 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-2 transition shadow-sm';
-        retailBtn.className = 'p-3.5 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-2 transition hover:border-slate-300';
-      }
-    }
-
-    function handleLoginSubmit(event) {
-      event.preventDefault();
-      const phone = document.getElementById('authPhoneInput').value;
-      if (phone.length < 10) {
-        alert('Please enter a valid 10-digit mobile number.');
-        return;
-      }
-
-      // Hide Auth Modal
-      document.getElementById('authModal').classList.add('hidden');
-
-      // Set App Role based on login selection
-      setRole(state.authRole);
-      showToast(`Welcome! Logged in successfully as ${state.authRole}`, 'fa-check-circle');
-    }
 
     // --- Navigation & Role Switching ---
     function setRole(role) {
