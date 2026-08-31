@@ -15,7 +15,7 @@
       theme: {
         extend: {
           colors: {
-            navy: { 800: '#1E293B', 900: '#0F172A', 950: '#030712' },
+            navy: { 50: '#EFF6FF', 800: '#1E293B', 900: '#0F172A', 950: '#030712' },
             gold: { 400: '#FBBF24', 500: '#F59E0B', 600: '#D97706' },
             whatsapp: { DEFAULT: '#25D366', hover: '#20BA56' }
           }
@@ -41,13 +41,13 @@
         <p id="authSubtitle" class="text-xs text-slate-500">Connect Local Wholesalers & Retailers Directly</p>
       </div>
 
-      <!-- Mode Selector Tabs (Login vs Signup) -->
+      <!-- Mode Selector Tabs -->
       <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-bold">
         <button type="button" id="tabLoginBtn" onclick="switchAuthMode('login')" class="flex-1 py-2.5 rounded-lg bg-white text-navy-900 shadow-sm transition">Login</button>
         <button type="button" id="tabSignupBtn" onclick="switchAuthMode('signup')" class="flex-1 py-2.5 rounded-lg text-slate-600 transition">Sign Up</button>
       </div>
 
-      <!-- Google Fake/Simulated Real Account Login -->
+      <!-- Google Simulated Login -->
       <button onclick="handleGoogleSimulatedLogin()" class="w-full py-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm">
         <i class="fa-brands fa-google text-red-500 text-base"></i>
         <span>Continue with Google Account</span>
@@ -67,7 +67,7 @@
           <input type="text" id="inputName" placeholder="Devendra Srivastava" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none">
         </div>
 
-        <!-- Mobile / Email Field -->
+        <!-- Mobile Field -->
         <div id="fieldGroupMobile">
           <label class="block font-bold text-slate-700 mb-1">Mobile / WhatsApp Number:</label>
           <input type="tel" id="inputMobile" placeholder="98110 XXXXX" maxlength="10" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none">
@@ -106,36 +106,88 @@
   <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 sm:h-20">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gold-500 text-navy-950 font-extrabold flex items-center justify-center text-xl">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('explore')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-navy-950 font-extrabold text-xl">
           <i class="fa-solid fa-handshake"></i>
         </div>
-        <span class="text-lg font-extrabold">Saudagar<span class="text-gold-400">Connection</span></span>
+        <div>
+          <span class="text-lg font-extrabold">Saudagar<span class="text-gold-400">Connection</span></span>
+          <p class="text-[11px] text-slate-300 hidden sm:block">Direct B2B Trade Directory</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-navy-800 border border-navy-700 text-xs">
           <div class="w-7 h-7 rounded-full bg-gold-500 text-navy-950 font-extrabold flex items-center justify-center" id="userInitialAvatar">D</div>
-          <span class="font-bold text-white" id="headerUserName">User</span>
+          <div class="text-left">
+            <div class="font-bold text-white truncate max-w-[100px]" id="headerUserName">Devendra</div>
+            <div class="text-[9px] text-emerald-400 uppercase font-extrabold" id="headerUserRole">Retailer</div>
+          </div>
         </div>
-        <button onclick="handleLogout()" class="px-3 py-2 rounded-xl bg-red-500/20 text-red-300 border border-red-500/30 font-bold text-xs">
-          Logout
+
+        <button onclick="handleLogout()" class="px-3 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-bold text-xs flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
       </div>
     </div>
   </header>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto p-6">
-    <h2 class="text-xl font-extrabold text-navy-900">Dashboard Area</h2>
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    
+    <!-- Retailer View Dashboard -->
+    <div id="retailerView" class="space-y-6">
+      <!-- Search Bar & Filters -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 space-y-4">
+        <div class="relative flex items-center">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-navy-700">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+          </div>
+          <input type="text" id="searchInput" placeholder="Search by category, brand (e.g. Tata, Boat, Fortune), or mandi location..." oninput="handleSearch(this.value)" class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-navy-600 text-sm transition">
+        </div>
+      </div>
+
+      <!-- Wholesalers List Grid -->
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-extrabold text-navy-900">Verified Wholesalers & Master Stockists</h3>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-navy-100 text-navy-800 font-bold" id="resultsCount">2 Found</span>
+      </div>
+
+      <div id="wholesalersGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- Wholesaler Hub View -->
+    <div id="wholesalerView" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-3">
+        <h3 class="text-lg font-extrabold text-navy-900">Wholesaler Hub Dashboard</h3>
+        <p class="text-xs text-slate-500">Manage your profile and direct retail inquiries here without catalogue hassle.</p>
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900">
+          <strong>Status:</strong> Active & Verified Supplier Account (GST & Mandi Verified).
+        </div>
+      </div>
+    </div>
+
   </main>
 
+  <!-- Toast Notification -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 bg-navy-900 text-white text-xs px-4 py-3 rounded-2xl shadow-2xl border border-gold-400/40 transform translate-y-20 opacity-0 transition-all">
     <span id="toastMessage" class="font-bold">Notification</span>
   </div>
 
   <script>
+    const INITIAL_WHOLESALERS = [
+      { id: 'ws-1', businessName: 'Gupta Bros & Sons Mandi Stockists', area: 'Khari Baoli', city: 'Delhi', minOrderValue: '₹15,000', phone: '+91 98112 34567', desc: 'Direct APMC mill rate stockist for Khari Baoli spice market.' },
+      { id: 'ws-2', businessName: 'Surat Fab Mill Direct Tex', area: 'Surat Textile Market', city: 'Surat', minOrderValue: '₹10,000', phone: '+91 98250 88991', desc: 'Direct factory mill outlet offering wholesale sarees & fabrics.' }
+    ];
+
     let currentUser = null;
-    let authMode = 'login'; // 'login', 'signup', 'forgot'
+    let authMode = 'login';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderWholesalers(INITIAL_WHOLESALERS);
+    });
 
     function switchAuthMode(mode) {
       authMode = mode;
@@ -195,7 +247,7 @@
 
       if (authMode === 'forgot') {
         if (mobile.length < 10) { alert('Enter valid mobile number'); return; }
-        showToast('Password reset link sent to mobile!');
+        showToast('Password reset OTP sent to mobile!');
         switchAuthMode('login');
         return;
       }
@@ -212,7 +264,18 @@
     function finishLogin() {
       document.getElementById('authModal').classList.add('hidden');
       document.getElementById('headerUserName').innerText = currentUser.name;
+      document.getElementById('headerUserRole').innerText = currentUser.role;
       document.getElementById('userInitialAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+      
+      // Toggle views based on selected role
+      if (currentUser.role === 'WHOLESALER') {
+        document.getElementById('wholesalerView').classList.remove('hidden');
+        document.getElementById('retailerView').classList.add('hidden');
+      } else {
+        document.getElementById('retailerView').classList.remove('hidden');
+        document.getElementById('wholesalerView').classList.add('hidden');
+      }
+
       showToast(`Welcome, ${currentUser.name}!`);
     }
 
@@ -221,6 +284,36 @@
       document.getElementById('authModal').classList.remove('hidden');
       switchAuthMode('login');
       showToast('Logged out successfully.');
+    }
+
+    function handleSearch(query) {
+      const q = query.toLowerCase();
+      const filtered = INITIAL_WHOLESALERS.filter(ws => 
+        ws.businessName.toLowerCase().includes(q) || ws.area.toLowerCase().includes(q) || ws.city.toLowerCase().includes(q)
+      );
+      renderWholesalers(filtered);
+    }
+
+    function renderWholesalers(list) {
+      const grid = document.getElementById('wholesalersGrid');
+      document.getElementById('resultsCount').innerText = `${list.length} Found`;
+      
+      grid.innerHTML = list.map(ws => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3 shadow-sm hover:shadow transition">
+          <div class="flex items-start justify-between">
+            <div>
+              <h4 class="font-extrabold text-navy-900 text-base">${ws.businessName}</h4>
+              <p class="text-xs text-slate-500"><i class="fa-solid fa-location-dot"></i> ${ws.area}, ${ws.city}</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Verified</span>
+          </div>
+          <p class="text-xs text-slate-600">${ws.desc}</p>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+            <span class="font-bold text-slate-700">MOV: <span class="text-emerald-600">${ws.minOrderValue}</span></span>
+            <a href="tel:${ws.phone}" class="px-3 py-1.5 rounded-lg bg-navy-900 text-white font-bold"><i class="fa-solid fa-phone"></i> Call Direct</a>
+          </div>
+        </div>
+      `).join('');
     }
 
     function showToast(msg) {
