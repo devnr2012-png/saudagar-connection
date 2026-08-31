@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SaudagarConnection | B2B Wholesaler & Retailer Direct Trade Directory</title>
-  <meta name="description" content="Connect local retailers with verified Indian wholesale distributors at Direct Mill Rates. No catalogue upload needed. 3 Free contact unlocks.">
+  <meta name="description" content="Connect local retailers with verified Indian wholesale distributors at Direct Mill Rates. No catalogue upload needed.">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts (Plus Jakarta Sans & Inter) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,299 +20,306 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-          },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'] },
           colors: {
-            navy: {
-              50: '#EFF6FF',
-              100: '#DBEAFE',
-              200: '#BFDBFE',
-              500: '#3B82F6',
-              600: '#2563EB',
-              700: '#1E3A8A',
-              800: '#1E293B',
-              900: '#0F172A',
-              950: '#030712',
-            },
-            gold: {
-              50: '#FFFBEB',
-              100: '#FEF3C7',
-              400: '#FBBF24',
-              500: '#F59E0B',
-              600: '#D97706',
-              700: '#B45309',
-            },
-            whatsapp: {
-              DEFAULT: '#25D366',
-              dark: '#128C7E',
-              hover: '#20BA56'
-            }
+            navy: { 50: '#EFF6FF', 100: '#DBEAFE', 600: '#2563EB', 800: '#1E293B', 900: '#0F172A', 950: '#030712' },
+            gold: { 400: '#FBBF24', 500: '#F59E0B', 600: '#D97706' },
+            whatsapp: { DEFAULT: '#25D366', hover: '#20BA56' }
           }
         }
       }
     }
   </script>
-
   <style>
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-    .custom-scroll::-webkit-scrollbar { display: none; }
-    .custom-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-    .modal-backdrop {
-      background-color: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(8px);
-    }
+    .modal-backdrop { background-color: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px); }
   </style>
 </head>
 <body class="h-full font-sans text-slate-800 antialiased flex flex-col bg-slate-50">
 
-  <!-- ================= STRICT MANDATORY LOGIN / SIGNUP SCREEN ================= -->
-  <div id="authScreenModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 transform transition-all">
+  <!-- ================= AUTH MODAL (LOGIN / SIGNUP / FORGOT) ================= -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200">
       
       <!-- Logo Header -->
       <div class="text-center space-y-2">
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20 text-navy-950 font-extrabold text-2xl mx-auto">
           <i class="fa-solid fa-handshake"></i>
         </div>
-        <h2 class="text-2xl font-extrabold text-navy-900 tracking-tight">Saudagar<span class="text-gold-600">Connection</span></h2>
-        <p class="text-xs text-slate-500">Sign Up or Login to Connect Local Wholesalers & Retailers</p>
+        <h2 id="authTitle" class="text-2xl font-extrabold text-navy-900">Welcome to SaudagarConnection</h2>
+        <p id="authSubtitle" class="text-xs text-slate-500">Connect Local Wholesalers & Retailers Directly</p>
       </div>
 
-      <!-- Role Selector Tabs -->
-      <div class="space-y-2">
-        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Select Your Business Profile:</label>
-        <div class="grid grid-cols-2 gap-3">
-          <button type="button" id="roleRetailerBtn" onclick="setAuthRole('RETAILER')" class="p-3 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-1.5 transition shadow-sm">
-            <i class="fa-solid fa-store text-base text-navy-900"></i>
-            <span>Retailer / Shop Owner</span>
-          </button>
-          <button type="button" id="roleWholesalerBtn" onclick="setAuthRole('WHOLESALER')" class="p-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-1.5 transition hover:border-slate-300">
-            <i class="fa-solid fa-warehouse text-base text-slate-400"></i>
-            <span>Wholesaler / Stockist</span>
-          </button>
-        </div>
+      <!-- Mode Selector Tabs (Login vs Signup) -->
+      <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-bold">
+        <button type="button" id="tabLoginBtn" onclick="switchAuthMode('login')" class="flex-1 py-2.5 rounded-lg bg-white text-navy-900 shadow-sm transition">Login</button>
+        <button type="button" id="tabSignupBtn" onclick="switchAuthMode('signup')" class="flex-1 py-2.5 rounded-lg text-slate-600 transition">Sign Up</button>
       </div>
 
-      <!-- Google Sign In Button -->
-      <button onclick="handleGoogleLogin()" class="w-full py-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm">
-        <i class="fa-brands fa-google text-red-500 text-base"><span></span></i>
-        <span>Continue / Sign Up with Google</span>
+      <!-- Google Real Sign-In Button -->
+      <button onclick="handleGoogleRealLogin()" class="w-full py-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm">
+        <i class="fa-brands fa-google text-red-500 text-base"></i>
+        <span>Continue with Google Account</span>
       </button>
 
       <div class="relative flex items-center justify-center">
         <div class="border-t border-slate-200 w-full"></div>
-        <span class="bg-white px-3 text-[11px] text-slate-400 font-bold uppercase">Or with Mobile Number</span>
+        <span class="bg-white px-3 text-[11px] text-slate-400 font-bold uppercase">Or Use Form</span>
       </div>
 
-      <!-- Phone / Login Form -->
-      <form onsubmit="handlePhoneAuthSubmit(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">WhatsApp / Mobile Number:</label>
-          <div class="relative flex items-center">
-            <span class="absolute left-3 text-slate-400 font-bold">+91</span>
-            <input type="tel" id="loginPhoneInput" required placeholder="98110 XXXXX" maxlength="10" class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-sm font-bold focus:ring-2 focus:ring-navy-600 focus:outline-none">
-          </div>
+      <!-- Dynamic Form (Login / Signup / Forgot) -->
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3 text-xs">
+        
+        <!-- Name Field (Only for Signup) -->
+        <div id="fieldGroupName" class="hidden">
+          <label class="block font-bold text-slate-700 mb-1">Full Name:</label>
+          <input type="text" id="inputName" placeholder="Devendra Srivastava" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
         </div>
 
-        <button type="submit" class="w-full py-3.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-sm shadow-lg shadow-navy-900/20 transition flex items-center justify-center gap-2">
-          <span>Get OTP & Start Trading</span>
-          <i class="fa-solid fa-arrow-right text-xs text-gold-400"></i>
+        <!-- Mobile Field (Signup & Login) -->
+        <div id="fieldGroupMobile">
+          <label class="block font-bold text-slate-700 mb-1">Mobile / WhatsApp Number:</label>
+          <input type="tel" id="inputMobile" placeholder="98110 XXXXX" maxlength="10" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+        </div>
+
+        <!-- Password Field -->
+        <div id="fieldGroupPassword">
+          <label class="block font-bold text-slate-700 mb-1" id="labelPassword">Password:</label>
+          <input type="password" id="inputPassword" placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none">
+        </div>
+
+        <!-- Role Selector (Only for Signup) -->
+        <div id="fieldGroupRole" class="hidden">
+          <label class="block font-bold text-slate-700 mb-1">I am a:</label>
+          <select id="inputRole" class="w-full p-3 rounded-xl border border-slate-300 bg-white text-xs font-bold focus:ring-2 focus:ring-navy-600 focus:outline-none">
+            <option value="RETAILER">Retailer / Shop Owner</option>
+            <option value="WHOLESALER">Wholesaler / Stockist</option>
+          </select>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="text-right">
+          <button type="button" id="forgotPasswordLink" onclick="switchAuthMode('forgot')" class="text-navy-600 font-bold hover:underline">Forgot Password?</button>
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full py-3.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-sm shadow-lg transition">
+          Login to Account
         </button>
       </form>
 
-      <!-- Trust footer -->
-      <div class="pt-2 border-t border-slate-100 flex items-center justify-center gap-4 text-[11px] text-slate-400 font-semibold">
-        <span><i class="fa-solid fa-shield-check text-emerald-500 mr-1"></i> GST Verified</span>
-        <span>•</span>
-        <span><i class="fa-solid fa-lock text-gold-500 mr-1"></i> Secure B2B</span>
+      <div class="text-center pt-2">
+        <button type="button" id="backToLoginBtn" onclick="switchAuthMode('login')" class="hidden text-xs font-bold text-slate-600 hover:underline">← Back to Login</button>
       </div>
 
     </div>
   </div>
 
-  <!-- ================= TOP HEADER & NAVIGATION ================= -->
+  <!-- ================= TOP HEADER ================= -->
   <header class="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
         
-        <!-- Logo & Branding -->
+        <!-- Logo -->
         <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('explore')">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20 text-navy-950 font-extrabold text-xl">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-navy-950 font-extrabold text-xl">
             <i class="fa-solid fa-handshake"></i>
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <span class="text-lg sm:text-xl font-extrabold tracking-tight text-white">Saudagar<span class="text-gold-400">Connection</span></span>
-              <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                <i class="fa-solid fa-shield-check mr-1"></i> 100% VERIFIED B2B
-              </span>
-            </div>
-            <p class="text-[11px] text-slate-300 hidden sm:block">Direct Mill Rate Wholesale Directory & RFQ Engine</p>
+            <span class="text-lg sm:text-xl font-extrabold tracking-tight text-white">Saudagar<span class="text-gold-400">Connection</span></span>
+            <p class="text-[11px] text-slate-300 hidden sm:block">Direct B2B Trade Directory</p>
           </div>
         </div>
 
-        <!-- Role Switcher & Action Controls -->
+        <!-- User Profile & Logout Section (Appears after Login) -->
         <div class="flex items-center gap-3">
-          <div class="bg-navy-800 p-1 rounded-xl border border-navy-700 flex items-center shadow-inner">
-            <button id="btnRoleRetailer" onclick="setRole('RETAILER')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 bg-gold-500 text-navy-950 shadow">
-              <i class="fa-solid fa-store mr-1.5"></i> Retailer Mode
-            </button>
-            <button id="btnRoleWholesaler" onclick="setRole('WHOLESALER')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white">
-              <i class="fa-solid fa-warehouse mr-1.5"></i> Wholesaler Hub
-            </button>
+          
+          <!-- Role Switcher -->
+          <div class="bg-navy-800 p-1 rounded-xl border border-navy-700 hidden sm:flex items-center">
+            <button id="btnRoleRetailer" onclick="setRole('RETAILER')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gold-500 text-navy-950">Retailer Mode</button>
+            <button id="btnRoleWholesaler" onclick="setRole('WHOLESALER')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300">Wholesaler Hub</button>
           </div>
 
-          <button onclick="switchTab('unlocked')" class="relative p-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-200 border border-navy-700 transition" title="Unlocked Suppliers">
-            <i class="fa-solid fa-address-book text-base"></i>
-            <span id="unlockedBadgeCount" class="absolute -top-1 -right-1 bg-emerald-500 text-white font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">1</span>
-          </button>
-          
-          <button onclick="openAuthModal()" class="px-3 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-gold-400 border border-navy-700 font-bold text-xs">
-            <i class="fa-solid fa-user-circle mr-1"></i> Account
-          </button>
-        </div>
+          <!-- Logged In User Profile Pill -->
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-navy-800 border border-navy-700 text-xs">
+            <div class="w-7 h-7 rounded-full bg-gold-500 text-navy-950 font-extrabold flex items-center justify-center" id="userInitialAvatar">D</div>
+            <div class="hidden md:block text-left">
+              <div class="font-bold text-white truncate max-w-[100px]" id="headerUserName">Devendra</div>
+              <div class="text-[9px] text-emerald-400 uppercase font-extrabold" id="headerUserRole">Retailer</div>
+            </div>
+          </div>
 
+          <!-- Logout Button -->
+          <button onclick="handleLogout()" class="px-3 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 font-bold text-xs flex items-center gap-1.5 transition" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span class="hidden sm:inline">Logout</span>
+          </button>
+
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- ================= SUB-NAV BANNER ================= -->
-  <div class="bg-navy-950 text-slate-300 py-2 border-b border-navy-800 px-4 text-xs">
-    <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto custom-scroll gap-4 whitespace-nowrap">
-      <div class="flex items-center gap-4">
-        <span class="flex items-center text-gold-400 font-bold"><i class="fa-solid fa-bolt mr-1.5 text-gold-400"></i> LIVE MANDI:</span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Khari Baoli', 'Grocery & FMCG')">📍 Khari Baoli</span>
-        <span class="text-slate-600">•</span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Sadar Bazar', 'Cosmetics & Personal Care')">📍 Sadar Bazar</span>
-        <span class="text-slate-600">•</span>
-        <span class="hover:text-white cursor-pointer" onclick="filterByPreset('Surat Textile Market', 'Textiles & Garments')">📍 Surat Textile Hub</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= MAIN CONTENT AREA ================= -->
+  <!-- ================= MAIN CONTENT ================= -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <div id="retailerView" class="space-y-6">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 space-y-4">
-        <div class="relative flex items-center">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-navy-700">
-            <i class="fa-solid fa-magnifying-glass text-lg"></i>
-          </div>
-          <input type="text" id="searchInput" placeholder="Search by category, brand (e.g. Tata, Boat, Fortune), or mandi location..." oninput="handleSearch(this.value)" class="w-full pl-11 pr-24 py-3.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-navy-600 text-sm sm:text-base transition">
-        </div>
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 custom-scroll" id="categoryChipsContainer"></div>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-3">
+        <h3 class="text-lg font-extrabold text-navy-900">Verified Wholesalers & Master Stockists</h3>
+        <p class="text-xs text-slate-500">Search local suppliers area-wise and connect instantly.</p>
+        <div id="wholesalersGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
       </div>
-      <div id="wholesalersGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
     </div>
 
     <div id="wholesalerView" class="hidden space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h3 class="text-lg font-extrabold text-navy-900 mb-2">Wholesaler Dashboard Hub</h3>
-        <p class="text-xs text-slate-500">Manage your direct leads and WhatsApp RFQs here.</p>
+        <h3 class="text-lg font-extrabold text-navy-900">Wholesaler Hub Dashboard</h3>
+        <p class="text-xs text-slate-500">Manage your profile and direct inquiries.</p>
       </div>
-    </div>
-
-    <div id="unlockedView" class="hidden space-y-6">
-      <h2 class="text-xl font-extrabold text-navy-900">Your Unlocked Wholesalers Directory</h2>
-      <div id="unlockedListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
     </div>
   </main>
 
-  <!-- Toast Notification Container -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-navy-900 text-white text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-2xl border border-gold-400/40 flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
-    <div id="toastIcon" class="text-gold-400 text-base"><i class="fa-solid fa-bell"></i></div>
-    <div id="toastMessage" class="font-bold">Notification message</div>
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-navy-900 text-white text-xs px-4 py-3 rounded-2xl shadow-2xl border border-gold-400/40 flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+    <div id="toastIcon" class="text-gold-400"><i class="fa-solid fa-bell"></i></div>
+    <div id="toastMessage" class="font-bold">Notification</div>
   </div>
 
   <script>
     const INITIAL_WHOLESALERS = [
-      { id: 'ws-1', businessName: 'Gupta Bros & Sons Mandi Stockists', contactPerson: 'Ramesh Gupta', phone: '+91 98112 34567', address: 'Shop 42, Khari Baoli, Delhi 110006', city: 'Delhi NCR', area: 'Khari Baoli', categories: ['Grocery & FMCG'], brandsDealtIn: ['MDH', 'Everest', 'Fortune Oil'], gstin: '07AABCG1234F1Z9', rating: 4.9, reviewsCount: 148, dealsCompleted: 840, minOrderValue: '₹15,000', deliveryTime: 'Same Day', marketStandingYears: 18, isVerified: true },
-      { id: 'ws-2', businessName: 'Surat Fab Mill Direct Tex', contactPerson: 'Pravinbhai Patel', phone: '+91 98250 88991', address: 'B-214, Millennium Textile Market 2, Surat', city: 'Surat', area: 'Surat Textile Market', categories: ['Textiles & Garments'], brandsDealtIn: ['Vimal', 'Surat Silk', 'Zari Sarees'], gstin: '24AAACP4567K1Z4', rating: 4.8, reviewsCount: 215, dealsCompleted: 1250, minOrderValue: '₹10,000', deliveryTime: '24-48 Hours', marketStandingYears: 22, isVerified: true }
+      { id: 'ws-1', businessName: 'Gupta Bros & Sons Mandi Stockists', area: 'Khari Baoli', city: 'Delhi', minOrderValue: '₹15,000', phone: '+91 98112 34567' },
+      { id: 'ws-2', businessName: 'Surat Fab Mill Direct Tex', area: 'Surat Textile Market', city: 'Surat', minOrderValue: '₹10,000', phone: '+91 98250 88991' }
     ];
 
-    let state = { role: 'RETAILER', wholesalers: [...INITIAL_WHOLESALERS], unlockedIds: ['ws-1'], authRole: 'RETAILER' };
+    let currentUser = null;
+    let authMode = 'login'; // 'login', 'signup', 'forgot'
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderCategoryChips();
       renderWholesalers();
-      renderUnlockedList();
     });
 
-    function setAuthRole(role) {
-      state.authRole = role;
-      const rBtn = document.getElementById('roleRetailerBtn');
-      const wBtn = document.getElementById('roleWholesalerBtn');
-      if (role === 'RETAILER') {
-        rBtn.className = 'p-3 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-1.5 transition shadow-sm';
-        wBtn.className = 'p-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-1.5 transition hover:border-slate-300';
-      } else {
-        wBtn.className = 'p-3 rounded-2xl border-2 border-navy-900 bg-navy-50 text-navy-900 font-extrabold text-xs flex flex-col items-center gap-1.5 transition shadow-sm';
-        rBtn.className = 'p-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-bold text-xs flex flex-col items-center gap-1.5 transition hover:border-slate-300';
+    function switchAuthMode(mode) {
+      authMode = mode;
+      const title = document.getElementById('authTitle');
+      const subtitle = document.getElementById('authSubtitle');
+      const tabLogin = document.getElementById('tabLoginBtn');
+      const tabSignup = document.getElementById('tabSignupBtn');
+      const fieldName = document.getElementById('fieldGroupName');
+      const fieldMobile = document.getElementById('fieldGroupMobile');
+      const fieldPassword = document.getElementById('fieldGroupPassword');
+      const fieldRole = document.getElementById('fieldGroupRole');
+      const forgotLink = document.getElementById('forgotPasswordLink');
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const backLogin = document.getElementById('backToLoginBtn');
+
+      if (mode === 'login') {
+        title.innerText = 'Welcome Back';
+        subtitle.innerText = 'Login with your mobile or Google account';
+        tabLogin.className = 'flex-1 py-2.5 rounded-lg bg-white text-navy-900 shadow-sm transition';
+        tabSignup.className = 'flex-1 py-2.5 rounded-lg text-slate-600 transition';
+        fieldName.classList.add('hidden');
+        fieldMobile.classList.remove('hidden');
+        fieldPassword.classList.remove('hidden');
+        fieldRole.classList.add('hidden');
+        forgotLink.classList.remove('hidden');
+        submitBtn.innerText = 'Login to Account';
+        backLogin.classList.add('hidden');
+      } else if (mode === 'signup') {
+        title.innerText = 'Create New Account';
+        subtitle.innerText = 'Register with Name, Mobile & Password';
+        tabSignup.className = 'flex-1 py-2.5 rounded-lg bg-white text-navy-900 shadow-sm transition';
+        tabLogin.className = 'flex-1 py-2.5 rounded-lg text-slate-600 transition';
+        fieldName.classList.remove('hidden');
+        fieldMobile.classList.remove('hidden');
+        fieldPassword.classList.remove('hidden');
+        fieldRole.classList.remove('hidden');
+        forgotLink.classList.add('hidden');
+        submitBtn.innerText = 'Sign Up & Register';
+        backLogin.classList.add('hidden');
+      } else if (mode === 'forgot') {
+        title.innerText = 'Reset Password';
+        subtitle.innerText = 'Enter your mobile number to reset password';
+        tabLogin.className = 'flex-1 py-2.5 rounded-lg text-slate-600 transition';
+        tabSignup.className = 'flex-1 py-2.5 rounded-lg text-slate-600 transition';
+        fieldName.classList.add('hidden');
+        fieldMobile.classList.remove('hidden');
+        fieldPassword.classList.add('hidden');
+        fieldRole.classList.add('hidden');
+        forgotLink.classList.add('hidden');
+        submitBtn.innerText = 'Send Password Reset OTP';
+        backLogin.classList.remove('hidden');
       }
     }
 
-    function handleGoogleLogin() {
-      document.getElementById('authScreenModal').classList.add('hidden');
-      setRole(state.authRole);
-      showToast('Successfully signed in with Google!', 'fa-brands fa-google');
+    function handleGoogleRealLogin() {
+      // Simulating real Google Account selection
+      currentUser = {
+        name: 'Devendra Srivastava',
+        email: 'devnr2012@gmail.com',
+        role: 'RETAILER'
+      };
+      finishLoginProcess();
     }
 
-    function handlePhoneAuthSubmit(e) {
+    function handleAuthSubmit(e) {
       e.preventDefault();
-      const phone = document.getElementById('loginPhoneInput').value;
-      if (phone.length < 10) { alert('Enter valid number'); return; }
-      document.getElementById('authScreenModal').classList.add('hidden');
-      setRole(state.authRole);
-      showToast('Login successful via Mobile OTP!', 'fa-check');
+      const mobile = document.getElementById('inputMobile').value;
+      const nameInput = document.getElementById('inputName').value;
+      const roleInput = document.getElementById('inputRole').value;
+
+      if (authMode === 'forgot') {
+        if (mobile.length < 10) { alert('Enter valid mobile number'); return; }
+        showToast('Password reset link/OTP sent to your mobile!', 'fa-check');
+        switchAuthMode('login');
+        return;
+      }
+
+      if (mobile.length < 10) { alert('Please enter a valid 10-digit mobile number.'); return; }
+
+      currentUser = {
+        name: authMode === 'signup' && nameInput ? nameInput : 'User ' + mobile.slice(-4),
+        role: authMode === 'signup' ? roleInput : 'RETAILER'
+      };
+
+      finishLoginProcess();
     }
 
-    function openAuthModal() {
-      document.getElementById('authScreenModal').classList.remove('hidden');
+    function finishLoginProcess() {
+      document.getElementById('authModal').classList.add('hidden');
+      
+      // Update UI Header with User Name & Initial
+      document.getElementById('headerUserName').innerText = currentUser.name;
+      document.getElementById('headerUserRole').innerText = currentUser.role;
+      document.getElementById('userInitialAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+
+      setRole(currentUser.role);
+      showToast(`Welcome back, ${currentUser.name}!`, 'fa-user-check');
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      // Show Auth Modal again
+      document.getElementById('authModal').classList.remove('hidden');
+      switchAuthMode('login');
+      showToast('Successfully logged out.', 'fa-right-from-bracket');
     }
 
     function setRole(role) {
-      state.role = role;
-      const r = document.getElementById('retailerView'), w = document.getElementById('wholesalerView');
-      if (role === 'RETAILER') { r.classList.remove('hidden'); w.classList.add('hidden'); }
-      else { w.classList.remove('hidden'); r.classList.add('hidden'); }
-    }
-
-    function switchTab(tab) {
-      if (tab === 'unlocked') {
-        document.getElementById('retailerView').classList.add('hidden');
-        document.getElementById('wholesalerView').classList.add('hidden');
-        document.getElementById('unlockedView').classList.remove('hidden');
+      const rView = document.getElementById('retailerView');
+      const wView = document.getElementById('wholesalerView');
+      if (role === 'RETAILER') {
+        rView.classList.remove('hidden');
+        wView.classList.add('hidden');
       } else {
-        document.getElementById('unlockedView').classList.add('hidden');
-        setRole('RETAILER');
+        wView.classList.remove('hidden');
+        rView.classList.add('hidden');
       }
-    }
-
-    function renderCategoryChips() {
-      const container = document.getElementById('categoryChipsContainer');
-      container.innerHTML = `<button class="px-3.5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-white">All Categories</button>`;
     }
 
     function renderWholesalers() {
       const grid = document.getElementById('wholesalersGrid');
-      grid.innerHTML = state.wholesalers.map(ws => `
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
-          <h4 class="font-extrabold text-navy-900 text-base">${ws.businessName}</h4>
-          <p class="text-xs text-slate-500">${ws.area} • ${ws.city}</p>
-          <div class="text-xs font-bold text-emerald-600">Min Order: ${ws.minOrderValue}</div>
-        </div>
-      `).join('');
-    }
-
-    function renderUnlockedList() {
-      const container = document.getElementById('unlockedListContainer');
-      container.innerHTML = state.wholesalers.map(ws => `
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-2">
+      grid.innerHTML = INITIAL_WHOLESALERS.map(ws => `
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
           <h4 class="font-extrabold text-navy-900">${ws.businessName}</h4>
-          <p class="text-xs text-slate-600"><i class="fa-solid fa-phone text-emerald-600"></i> ${ws.phone}</p>
+          <p class="text-xs text-slate-500">${ws.area}, ${ws.city}</p>
+          <div class="text-xs font-bold text-emerald-600">MOV: ${ws.minOrderValue}</div>
         </div>
       `).join('');
     }
@@ -322,7 +329,7 @@
       document.getElementById('toastMessage').innerText = msg;
       document.getElementById('toastIcon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
       t.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+      setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3500);
     }
   </script>
 </body>
